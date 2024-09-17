@@ -15,7 +15,7 @@ export class SigninComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   signIn() {
     if (this.username === '' || this.password === '') {
       Swal.fire({
@@ -35,7 +35,10 @@ export class SigninComponent {
         this.http
           .post('https://localhost:3000/api/users/signin', playload)
           .subscribe((res: any) => {
-            
+            this.token = res.token;
+            localStorage.setItem('angular_token', this.token);
+            localStorage.setItem('angular_username', this.username);
+            location.reload();
           }),
           Swal.fire({
             title: 'ตรวจสอบข้อมูล',
