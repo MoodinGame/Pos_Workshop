@@ -1,3 +1,5 @@
+@if (token == undefined)
+{
 <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-md-6">
@@ -8,11 +10,11 @@
           <div class="card-body p-4">
               <div class="mb-4">
                 <label for="Username" class="form-label">Username</label>
-                <input type="text" class="form-control form-control-lg" id="usn" placeholder="Enter Username"   [(ngModel)]="username" name="username">
+                <input type="text" class="form-control form-control-lg"  placeholder="Enter Username"   [(ngModel)]="username" >
               </div>
               <div class="mb-4">
                 <label for="pwd" class="form-label">Password</label>
-                <input type="password" class="form-control form-control-lg" id="pwd" placeholder="Enter Password" [(ngModel)]="password" name="password">
+                <input type="password" class="form-control form-control-lg"  placeholder="Enter Password" [(ngModel)]="password" >
               </div>
               <div class="d-grid">
                 <button type="submit" class="btn btn-primary btn-lg" (click)="signIn()" >Submit</button>
@@ -22,4 +24,8 @@
       </div>
     </div>
   </div>
+} @else
+{
+<div class="text-center h2">Welcome to Back Office</div>
+}
   

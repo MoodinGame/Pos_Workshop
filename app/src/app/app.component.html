@@ -1,5 +1,5 @@
+@if (token != '') {
 <div class="wrapper">
-  @if (token != '') {
   <app-navbar> </app-navbar>
   <app-sidebar></app-sidebar>
   <div class="content-wrapper">
@@ -9,7 +9,7 @@
       </div>
     </section>
   </div>
-} @else{
-  <app-signin></app-signin>
-}
 </div>
+} @else{
+  <app-sign-in></app-sign-in>
+}

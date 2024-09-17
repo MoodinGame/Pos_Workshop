@@ -11,7 +11,12 @@ module.exports = {
     try {
       const { username , password } = req.body;
       const rows = await prisma.user.findFirst({
-        where: {
+        select: {
+          id: true,
+          name: true,
+          level: true
+          }
+        ,where: {
             username: username,
             password: password,
             status : 'use'
@@ -21,8 +26,7 @@ module.exports = {
          if (rows != null) {
             const key =  process.env.SECRET_KEY;
             const token = jwt.sign({ userId: rows.id }, key, { expiresIn: '30d' });
-         return res.send({ token : token });
-        
+         return res.send({ token : token , name : rows.name});
         }
 
          return res.status(401).send({ error: 'Invalid credentials' });
