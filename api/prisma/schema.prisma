@@ -21,3 +21,11 @@ model User {
   password String
   status   String @default("use")
 }
+
+model FoodType {
+  id        Int     @id @default(autoincrement())
+  name      String
+  remark    String
+  status    String  @default("use")
+}
+

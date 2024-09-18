@@ -1,12 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const userController = require('./Controller/UserController');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
 // Initialize dotenv for environment variables
 dotenv.config();
 
+
+const userController = require('./Controller/UserController');
+const foodTypeController = require('./Controller/FoodTypeController');
 const app = express();
 
 // Middleware
@@ -18,6 +20,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Routes
 app.post('/api/user/signin', (req, res) => {
     userController.signIn(req, res);
+});
+
+app.post('/api/FoodType/create', (req, res) => {
+    foodTypeController.create(req, res);
+})
+app.get('/api/foodType/list', (req, res) => {
+    foodTypeController.list(req, res);
 });
 
 // Error handling middleware

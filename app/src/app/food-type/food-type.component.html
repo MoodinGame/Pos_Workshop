@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 m-5">
+        <div class="card shadow-lg rounded-lg border-0">
+          <div class="card-header bg-primary text-white text-center  rounded-top">
+            <h3>ประเภทอาหาร</h3>
+          </div>
+          <div class="card-body p-4">
+              <div class="mb-4">
+                <label class="form-label">ชื่อประเภท</label>
+                <input type="text" class="form-control form-control-lg"   [(ngModel)]="name" >
+              </div>
+              <div class="mb-4">
+                <label class="form-label">หมายเหตุ</label>
+                <input type="text" class="form-control form-control-lg"  [(ngModel)]="remark" >
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg" (click)="save()" >บันทึก</button>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <table class="mt-3 table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ชื่อประเภท</th>
+            <th>หมายเหตุ</th>
+            <th width="120px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (item of foodTypes; track item) {
+            <tr>
+                <td>{{item.name}}</td>
+                <td>{{item.remark}}</td>
+                <td class="text-center">
+                 <button class="btn bg-primary mr-2" type="button">
+                    <i class="fas fa-edit"></i>
+                 </button>
+                 <button class="btn bg-danger" type="button">
+                    <i class="fas fa-times"></i>
+                 </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+  </table>
+  
