@@ -17,7 +17,17 @@ export class FoodTypeComponent implements OnInit {
   foodTypes: any = [];
   id: number = 0;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+
+   
+   }
+
+   clearForm(){
+
+    this.name = '';
+    this.remark = '';
+    this.id = 0;  
+  }
 
   save() {
     try {
@@ -26,8 +36,6 @@ export class FoodTypeComponent implements OnInit {
         remark: this.remark,
         id: 0,
       };
-
-
 
       if (this.id > 0) {
 
