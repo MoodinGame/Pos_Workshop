@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component ,Input,Output } from '@angular/core';
 
 @Component({
   selector: 'app-my-modal',
@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './my-modal.component.css'
 })
 export class MyModalComponent {
-
+  @Input() modalId: string = '';
+  @Input()  title: string = '';
 }

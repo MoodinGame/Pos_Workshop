@@ -18,15 +18,30 @@ module.exports = {
     }
   },
   list: async (req, res) => {
-   try {
-    const rows = await prisma.FoodType.findMany({
-    where: {
-      status: "use"
+    try {
+      const rows = await prisma.FoodType.findMany({
+        where: {
+          status: "use"
+        }
+      });
+      return res.send({ results: rows });
+    } catch (e) {
+      return res.status(500).send({ error: e.message });
     }
-    })
-    return res.send({  results: rows });
-   } catch (e) {
-    return res.status(500).send({ error: e.message });
-   }
+  },
+  remove: async (req, res) => {
+    try {
+      await prisma.FoodType.update({
+        data: {
+          status: "delete"
+        },
+        where: {
+          id: parseInt(req.params.id)
+        }
+      });
+      return res.send({ messages: success });
+    } catch (e) {
+      return res.status(500).send({ error: e.message });
+    }
   }
-}
+};

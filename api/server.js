@@ -29,6 +29,10 @@ app.get('/api/foodType/list', (req, res) => {
     foodTypeController.list(req, res);
 });
 
+app.delete('/api/foodType/remove/:id', (req, res) => {
+    foodTypeController.remove(req, res);
+})
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);

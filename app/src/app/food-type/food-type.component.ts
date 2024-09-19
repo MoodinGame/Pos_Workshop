@@ -3,11 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import config from '../config';
 import Swal from 'sweetalert2';
-
+import { MyModalComponent } from '../my-modal/my-modal.component';
 @Component({
   selector: 'app-food-type',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule ,MyModalComponent],
   templateUrl: './food-type.component.html',
   styleUrl: './food-type.component.css'
 })
@@ -19,7 +19,6 @@ export class FoodTypeComponent implements OnInit {
    constructor(private http: HttpClient) {}
 
  save(){
-
   try {
     const playload = {
       name : this.name,
