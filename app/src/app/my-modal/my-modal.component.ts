@@ -9,5 +9,5 @@ import { Component ,Input,Output } from '@angular/core';
 })
 export class MyModalComponent {
   @Input() modalId: string = '';
-  @Input()  title: string = '';
+  @Input() title: string = '';
 }

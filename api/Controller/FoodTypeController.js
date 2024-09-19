@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 module.exports = {
   create: async (req, res) => {
     try {
-      await prisma.FoodType.create({
+      await prisma.foodType.create({
         data: {
           name: req.body.name,
           remark: req.body.remark ?? "",
@@ -19,7 +19,7 @@ module.exports = {
   },
   list: async (req, res) => {
     try {
-      const rows = await prisma.FoodType.findMany({
+      const rows = await prisma.foodType.findMany({
         where: {
           status: "use"
         }
@@ -31,7 +31,7 @@ module.exports = {
   },
   remove: async (req, res) => {
     try {
-      await prisma.FoodType.update({
+      await prisma.foodType.update({
         data: {
           status: "delete"
         },
@@ -39,7 +39,24 @@ module.exports = {
           id: parseInt(req.params.id)
         }
       });
-      return res.send({ messages: success });
+
+      return res.send({ message: "Delete success" });
+    } catch (e) {
+      return res.status(500).send({ error: e.message });
+    }
+  },
+  update: async (req, res) => {
+    try {
+      await prisma.foodType.update({
+        data: {
+          name: req.body.name,
+          remark: req.body.remark
+        },
+        where: {
+          id: req.body.id,
+        }
+      });
+      return res.send({ message: "Update success" });
     } catch (e) {
       return res.status(500).send({ error: e.message });
     }

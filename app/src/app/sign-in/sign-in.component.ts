@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-
+import config from '../config';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -49,7 +49,7 @@ export class SignInComponent implements OnInit {
               this.token = res.token;
               localStorage.setItem('angular_token', this.token);
               localStorage.setItem('angular_name', res.name);
-
+              localStorage.setItem('angular_id', res.id);
               location.reload();
             },
             (err: any) => {

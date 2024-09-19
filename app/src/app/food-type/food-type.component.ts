@@ -7,44 +7,103 @@ import { MyModalComponent } from '../my-modal/my-modal.component';
 @Component({
   selector: 'app-food-type',
   standalone: true,
-  imports: [FormsModule ,MyModalComponent],
+  imports: [FormsModule, MyModalComponent],
   templateUrl: './food-type.component.html',
   styleUrl: './food-type.component.css'
 })
 export class FoodTypeComponent implements OnInit {
-   name : string = '';
-   remark : string = '';
-   foodTypes : any = [];
+  name: string = '';
+  remark: string = '';
+  foodTypes: any = [];
+  id: number = 0;
 
-   constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
- save(){
-  try {
-    const playload = {
-      name : this.name,
-      remark : this.remark
-    };
+  save() {
+    try {
+      const playload = {
+        name: this.name,
+        remark: this.remark,
+        id: 0,
+      };
 
-    this.http.post(config.apiServer+ '/api/FoodType/create' , playload).subscribe((res) =>{
-      console.log(res);
-      this.fetchData();
-    })
-  } catch (e: any) {
-    Swal.fire({
-      title: 'Error!',
-      text: 'กรุณากรอกข้อมูลให้ครบถ้วน',
-      icon: 'error',
-    })
+
+
+      if (this.id > 0) {
+
+        playload.id = this.id;
+
+        this.http
+          .put(config.apiServer + '/api/foodType/update', playload)
+          .subscribe((res: any) => {
+            this.fetchData();
+            this.id = 0;
+          });
+
+      } else {
+
+        this.http.post(config.apiServer + '/api/FoodType/create', playload)
+          .subscribe((res) => {
+            console.log(res);
+            this.fetchData();
+          })
+
+      }
+
+    document.getElementById('modalFoodType_btnClose')?.click();
+
+    } catch (e: any) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+        icon: 'error',
+      })
+    }
   }
- }
+  ngOnInit() {
+    this.fetchData();
+  }
 
- ngOnInit(){
-   this.fetchData();
- }
+  fetchData() {
+    this.http
+      .get(config.apiServer + '/api/foodType/list')
+      .subscribe((res: any) => {
+        this.foodTypes = res.results;
+      });
+  }
 
- fetchData(){
-  this.http.get(config.apiServer + '/api/FoodType/list').subscribe(( res : any) => {
-    this.foodTypes = res.results;
-  })
- }
+  async remove(item: any) {
+    try {
+      const button = await Swal.fire({
+        title: 'ลบรายการ',
+        text: 'คุณต้องการลบรายการใช่หรือไม่',
+        icon: 'question',
+        showCancelButton: true,
+        showConfirmButton: true,
+      });
+
+      if (button.isConfirmed) {
+        this.http
+          .delete(config.apiServer + '/api/foodType/remove/' + item.id)
+          .subscribe((res: any) => {
+            this.fetchData();
+          });
+      }
+    } catch (e: any) {
+      Swal.fire({
+        title: 'error',
+        text: e.message,
+        icon: 'error',
+      });
+    }
+  }
+
+  edit(item: any) {
+    this.name = item.name;
+    this.remark = item.remark;
+    this.id = item.id;
+  }
+
 }
+
+

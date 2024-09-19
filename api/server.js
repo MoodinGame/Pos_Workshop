@@ -29,6 +29,10 @@ app.get('/api/foodType/list', (req, res) => {
     foodTypeController.list(req, res);
 });
 
+app.put('/api/foodType/update', (req, res) => {
+    foodTypeController.update(req, res);
+})
+
 app.delete('/api/foodType/remove/:id', (req, res) => {
     foodTypeController.remove(req, res);
 })
