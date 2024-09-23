@@ -1,1 +1,79 @@
-<p>food-size works!</p>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="mt-2">
+            <div class="card shadow-lg rounded-lg border-0">
+                <div class="card-header bg-primary text-white rounded-top">
+                    <h3>ขนาด</h3>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFoodSize">
+                        <i class="fas fa-plus me-2"></i>เพิ่มประเภทอาหาร
+                    </button>
+                    <!-- Table to display food types -->
+                    <table class="mt-3 table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ประเภทอาหาร</th>
+                                <th>ชื่อ</th>
+                                <th class="text-end">จ่ายเพิ่ม(บาท)</th>
+                                <th>หมายเหตุ</th>
+                                <th width="120px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of foodSizes; track item)
+                            {
+                            <tr>
+                                <td>{{ item.FoodType.name }}</td>
+                                <td>{{ item.name }}</td>
+                                <td class="text-end">{{ item.moneyAdded }}</td>
+                                <td>{{ item.remark }}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalFoodSize"
+                                        (click)="edit(item)">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-danger" (click)="remove(item)">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-my-modal modalId="modalFoodSize" title="ขนาด">
+    <div class="mb-4">
+        <label class="form-label">ประเภทอาหาร</label>
+        <select class="form-control" [(ngModel)]="foodTypeId">
+            @for (item of foodTypes; track item) {
+            <option [value]="item.id">
+                {{ item.name }}
+            </option>
+            }
+        </select>
+    </div>
+    <div class="mb-4">
+        <label class="form-label">ชื่อ</label>
+        <input type="text" [(ngModel)]="name" class="form-control form-control-lg">
+    </div>
+    <div class="mb-4">
+        <label class="form-label">คิดเงินเพิ่ม(บาท)</label>
+        <input type="number" [(ngModel)]="price" class="form-control form-control-lg">
+    </div>
+    <div class="mb-4">
+        <label class="form-label">หมายเหตุ</label>
+        <input type="text" [(ngModel)]="remark" class="form-control form-control-lg">
+    </div>
+ 
+        <button class="btn bg-primary"  (click)="save()">
+            <i class="fas fa-save me-2"></i>บันทึก
+        </button>
+  
+</app-my-modal>

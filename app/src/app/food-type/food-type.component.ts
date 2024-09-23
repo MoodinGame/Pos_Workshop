@@ -31,7 +31,7 @@ export class FoodTypeComponent implements OnInit {
 
   save() {
     try {
-      const playload = {
+      const payload = {
         name: this.name,
         remark: this.remark,
         id: 0,
@@ -39,10 +39,10 @@ export class FoodTypeComponent implements OnInit {
 
       if (this.id > 0) {
 
-        playload.id = this.id;
+        payload.id = this.id;
 
         this.http
-          .put(config.apiServer + '/api/foodType/update', playload)
+          .put(config.apiServer + '/api/foodType/update', payload)
           .subscribe((res: any) => {
             this.fetchData();
             this.id = 0;
@@ -50,7 +50,7 @@ export class FoodTypeComponent implements OnInit {
 
       } else {
 
-        this.http.post(config.apiServer + '/api/FoodType/create', playload)
+        this.http.post(config.apiServer + '/api/FoodType/create', payload)
           .subscribe((res) => {
             console.log(res);
             this.fetchData();

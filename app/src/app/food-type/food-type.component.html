@@ -45,17 +45,14 @@
 
 
 <app-my-modal modalId="modalFoodType" title="ประเภทอาหาร">
-        <div class="modal-body">
-          <!-- Modal form fields -->
           <div class="mb-4">
             <label class="form-label">ชื่อประเภท</label>
-            <input type="text" class="form-control form-control-lg" [(ngModel)]="name">
+            <input  class="form-control form-control-lg" [(ngModel)]="name">
           </div>
           <div class="mb-4">
             <label class="form-label">หมายเหตุ</label>
-            <input type="text" class="form-control form-control-lg" [(ngModel)]="remark">
+            <input class="form-control form-control-lg" [(ngModel)]="remark">
           </div>
-        </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" (click)="save()">บันทึก</button>
         </div>
