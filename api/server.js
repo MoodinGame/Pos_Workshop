@@ -11,6 +11,7 @@ const userController = require('./Controller/UserController');
 const foodTypeController = require('./Controller/FoodTypeController');
 const foodSizeController = require('./Controller/FoodSizeController');
 const tasteController = require('./Controller/TasteController');
+const foodController = require('./Controller/FoodController');
 const app = express();
 
 // Middleware
@@ -70,6 +71,10 @@ app.delete('/api/taste/remove/:id', (req, res) => {
 
 app.put('/api/taste/update', (req, res) =>{
     tasteController.update(req, res);
+})
+
+app.post('/api/food/create', (req, res) => {
+    foodController.create(req, res);
 })
 
 

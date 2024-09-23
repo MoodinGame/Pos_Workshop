@@ -3,6 +3,8 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { FoodTypeComponent } from './food-type/food-type.component';
 import { FoodSizeComponent } from './food-size/food-size.component';
 import { TasteComponent } from './taste/taste.component';
+import { FoodComponent } from './food/food.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -19,5 +21,8 @@ export const routes: Routes = [
     {
         path: 'taste',
         component: TasteComponent,
-    },
+    },{
+        path: 'food',
+        component: FoodComponent,
+    }
 ];
