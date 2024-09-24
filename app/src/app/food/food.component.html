@@ -6,32 +6,47 @@
                     <h3>อาหาร</h3>
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFood">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFood" (click)="clearForm()">
                         <i class="fas fa-plus me-2"></i>เพิ่มอาหาร
                     </button>
                     <!-- Table to display food sizes -->
-                    <table class="mt-3 table table-hover">
+                    <table class="mt-3 table table-bordered table-striped">
                         <thead class="thead-dark">
                             <tr>
+                                <th scope="col">รูปอาหาร</th>
                                 <th scope="col">ประเภทอาหาร</th>
-                                <th scope="col">ชื่ออาหาร</th>
-                                <th scope="col">Flie ภาพ</th>
-                                <th scope="col">ราคา</th>
-                                <th scope="col">หมายเหตุ</th>
                                 <th scope="col">หมวด</th>
+                                <th scope="col">ชื่ออาหาร</th>
+                                <th scope="col">หมายเหตุ</th>
+                                <th scope="col" class="text-end">ราคา</th>
                                 <th scope="col" width="120px"></th>
                             </tr>
                         </thead>
                         <tbody>
+                            @for (item of foods; track $index) {
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                @if (item.img != "") {
+                                <td><img src="{{serverPath}}/uploads/{{item.img}}" style="width: 70px; object-fit: cover;"></td>
+                                }@else {
+                                    <td>-</td>
+                                }
+                                <td>{{item.FoodType.name}}</td>
+                                <td>{{item.foodType}}</td>
+                                <td>{{item.name}}</td>
+                                <td> {{item.remark}}</td>
+                                <td class="text-end" >{{item.price}}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalFood"
+                                      (click)="edit(item)" >
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-danger"  (click)="remove(item)">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                                
                             </tr>
+                        }
                         </tbody>
 
                     </table>
@@ -40,7 +55,7 @@
         </div>
     </div>
 
-    <app-my-modal modalId="modalFood" title="อาหาร/เครื่องดื่ม">
+    <app-my-modal modalId="modalFood" title="อาหาร / เครื่องดื่ม">
         <div class="mb-4">
             <label class="form-label">ประเภทอาหาร</label>
             <select class="form-select form-select-lg " [(ngModel)]="foodTypeId">
@@ -56,8 +71,11 @@
             <input [(ngModel)]="name" class="form-control form-control-lg">
         </div>
         <div class="mb-4">
+            @if (img != "") {
+            <div class="mb-2"><img src="{{serverPath}}/uploads/{{img}}" style="width: 120px; object-fit: cover;"></div>
+            }
             <label class="form-label">Flie ภาพ</label>
-            <input  type="file" class="form-control form-control-lg">
+            <input  type="file" class="form-control form-control-lg"  (change)="fileSelected($event.target)">
         </div>
         <div class="mb-4">
             <label class="form-label">ราคา</label>

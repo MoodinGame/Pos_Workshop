@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const fileUpload = require('express-fileupload');
 
 // Initialize dotenv for environment variables
 dotenv.config();
@@ -18,6 +19,8 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(fileUpload());
+app.use('/uploads' , express.static('./uploads'))
 
 
 // Routes
@@ -76,7 +79,20 @@ app.put('/api/taste/update', (req, res) =>{
 app.post('/api/food/create', (req, res) => {
     foodController.create(req, res);
 })
+app.post('/api/food/upload', (req, res) => {
+    foodController.upload(req, res);
+})
 
+app.get('/api/food/list', (req, res) => {
+    foodController.list(req, res);
+});
+
+app.delete('/api/food/remove/:id', (req, res) => {
+    foodController.remove(req, res);
+})
+app.put('/api/food/update', (req, res) =>{
+    foodController.update(req, res);
+})
 
 // Error handling middleware
 app.use((err, req, res, next) => {
