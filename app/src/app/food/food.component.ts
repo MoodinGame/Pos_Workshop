@@ -129,6 +129,7 @@ async save() {
    this.remark = '',
    this.foodType = 'food ',
    this.id = 0;
+   this.img = ''; 
   }
  
 

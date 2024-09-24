@@ -72,10 +72,10 @@
         </div>
         <div class="mb-4">
             @if (img != "") {
-            <div class="mb-2"><img src="{{serverPath}}/uploads/{{img}}" style="width: 120px; object-fit: cover;"></div>
+            <div class="mb-2"><img src="{{serverPath}}/uploads/{{img}}" style="width: 120px; object-fit: cover;" ></div>
             }
             <label class="form-label">Flie ภาพ</label>
-            <input  type="file" class="form-control form-control-lg"  (change)="fileSelected($event.target)">
+            <input  type="file" class="form-control form-control-lg" id="img" (change)="fileSelected($event.target)">
         </div>
         <div class="mb-4">
             <label class="form-label">ราคา</label>

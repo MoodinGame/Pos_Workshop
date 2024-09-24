@@ -12,7 +12,7 @@ module.exports = {
           name: req.body.name,
           remark: req.body.remark,
           price: req.body.price,
-          img: req.body.img,
+          img: req.body.img?? "",
           foodType: req.body.foodType,
           status: "use"
         }
@@ -76,13 +76,24 @@ module.exports = {
   },
   update: async (req, res) => {
     try {
+      let img = req.body.img;
+      if (img === undefined) {
+        const row = await prisma.food.findFirst({
+          where: {
+            id: req.body.id
+          }
+        });
+        img = row.img;
+      }
+
       await prisma.food.update({
         data: {
           foodType: req.body.foodType,
           foodTypeId: req.body.foodTypeId,
           name: req.body.name,
           remark: req.body.remark,
-          price: req.body.price
+          price: req.body.price,
+          img: img
         },
         where: {
           id: req.body.id
