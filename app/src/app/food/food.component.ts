@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import config from '../config';
 import Swal from 'sweetalert2';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, subscribeOn } from 'rxjs';
 
 @Component({
   selector: 'app-food',
@@ -27,7 +27,7 @@ export class FoodComponent implements OnInit {
   foodType: string = 'food ';
   id: number = 0;
   foodTypeId: number = 0;
-  file: File | undefined = undefined ;
+  file: File | undefined = undefined;
   serverPath: string = '';
   img: string = '';
 
@@ -37,14 +37,14 @@ export class FoodComponent implements OnInit {
     this.serverPath = config.apiServer;
   }
 
- async fetchData() {
-   this.http.get(config.apiServer + '/api/food/list').subscribe((res : any) => {
-    this.foods = res.results;
-   })
-    
+  async fetchData() {
+    this.http.get(config.apiServer + '/api/food/list').subscribe((res: any) => {
+      this.foods = res.results;
+    })
+
   }
 
- async fetchDataFoodType() {
+  async fetchDataFoodType() {
     try {
       this.http
         .get(config.apiServer + '/api/foodType/list')
@@ -62,7 +62,7 @@ export class FoodComponent implements OnInit {
 
   }
 
-async save() {
+  async save() {
     try {
 
       const fileName = await this.uploadFile()
@@ -102,7 +102,7 @@ async save() {
     }
   }
 
-  fileSelected(file : any ){
+  fileSelected(file: any) {
     if (file.files != undefined) {
       if (file.files.length > 0) {
         this.file = file.files[0]
@@ -111,60 +111,44 @@ async save() {
   }
 
 
- async uploadFile() {
-    if(this.file !== undefined ){
+  async uploadFile() {
+    if (this.file !== undefined) {
       const formData = new FormData();
       formData.append('img', this.file);
-      const res : any = await firstValueFrom(
+      const res: any = await firstValueFrom(
         this.http.post(config.apiServer + '/api/food/upload', formData)
       )
       return res.fileName
     }
   }
 
-  clearForm() {
-   this.name = '',
-   this.price = 0,
-   this.file = undefined;
-   this.remark = '',
-   this.foodType = 'food ',
-   this.id = 0;
-   this.img = ''; 
-  }
- 
+  async remove(item: any) {
+    try {
+      const button = await Swal.fire({
+        title: 'ลบรายการ',
+        text: 'คุณต้องการลบรายการใช่หรือไม่',
+        icon: 'question',
+        showCancelButton: true,
+        showConfirmButton: true,
+      })
 
-  async remove(item : any) {
-      try {
-        const button = await Swal.fire({
-          title: 'ลบรายการ',
-          text: 'คุณต้องการลบรายการใช่หรือไม่',
-          icon: 'question',
-          showCancelButton: true,
-          showConfirmButton: true,
-        })
-
-
-        if (button.isConfirmed) {
-          this.http
+      if (button.isConfirmed) {
+        this.http
           .delete(config.apiServer + '/api/food/remove/' + item.id)
           .subscribe((res: any) => {
             this.fetchData();
           });
-        }
-      } catch (e:any) {
-        Swal.fire({
-          title: 'Error',
-          text: e.message,
-          icon: 'error',
-        })
       }
-
-
-
-
+    } catch (e: any) {
+      Swal.fire({
+        title: 'Error',
+        text: e.message,
+        icon: 'error',
+      })
+    }
   }
 
-  edit(item : any) {
+  edit(item: any) {
     this.id = item.id;
     this.name = item.name;
     this.foodTypeId = item.foodTypeId;
@@ -172,5 +156,48 @@ async save() {
     this.remark = item.remark;
     this.price = item.price;
     this.img = item.img;
+
+    const img = document.getElementById('img') as HTMLInputElement;
+    img.value = '';
   }
+
+  clearForm() {
+    this.name = '',
+      this.price = 0,
+      this.file = undefined;
+    this.remark = '',
+      this.foodType = 'food ',
+      this.id = 0;
+    this.img = '';
+
+    const img = document.getElementById('img') as HTMLInputElement;
+    img.value = '';
+  }
+
+  filterFoods() {
+    this.filter('food')
+  }
+  filterDrinks() {
+    this.filter('drink')
+  }
+  filterAll() {
+    this.fetchData();
+  }
+
+  filter(foodType: string) {
+    try {
+      this.http.get(config.apiServer + '/api/food/filter/' + foodType)
+        .subscribe((res: any) => {
+          this.foods = res.results;
+        })
+
+    } catch (e: any) {
+      Swal.fire({
+        title: 'Error',
+        text: e.message,
+        icon: 'error',
+      })
+    }
+  }
+
 }

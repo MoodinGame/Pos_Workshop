@@ -94,6 +94,11 @@ app.put('/api/food/update', (req, res) =>{
     foodController.update(req, res);
 })
 
+
+app.get('/api/food/filter/:foodType', (req, res) => {
+    foodController.filter(req, res);
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
