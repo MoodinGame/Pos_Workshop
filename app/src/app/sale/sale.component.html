@@ -1,1 +1,36 @@
-<p>sale works!</p>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="mt-2">
+            <div class="card shadow-lg rounded-lg border-0">
+                <div class="card-header bg-primary text-white rounded-top">
+                    <h3>ขายอาหาร / เครื่องดื่ม</h3>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary me-1" (click)="filterFoods()">
+                        <i class="fas fa-utensils me-2"></i>อาหาร
+                    </button>
+                    <button class="btn btn-success me-1" (click)="filterDrinks()">
+                        <i class="fas fa-wine-glass me-2"></i>เครื่องดื่ม
+                    </button>
+                    <button class="btn btn-success">
+                        <i class="fas fa-check me-2"></i> ทั้งหมด
+                    </button>
+
+
+                    <div class="row mt-3">
+                        @for (item of foods; track $index) {
+                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-sm-12">
+                            <div class="card">
+                                <img class="card-image" src="{{apiPath}}/uploads/{{item.img}}" height="150px"  style="object-fit: fill;">
+                                <div class="card-body">
+                                    <div class="text-center h5">{{ item.name }}</div>
+                                    <div class="text-success t-3 text-center">{{ item.price }} บาท </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
