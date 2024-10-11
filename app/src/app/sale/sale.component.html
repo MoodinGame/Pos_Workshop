@@ -1,30 +1,96 @@
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="mt-2">
-            <div class="card shadow-lg rounded-lg border-0">
-                <div class="card-header bg-primary text-white rounded-top">
-                    <h3>ขายอาหาร / เครื่องดื่ม</h3>
+    <div class="card shadow-lg rounded-lg border-0 mt-2">
+        <div class="card-header bg-primary text-white rounded-top">
+            <h3>ขายอาหาร / เครื่องดื่ม</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="d-flex justify-content-start align-items-center ">
+                <!-- Table Number Input -->
+                <div class="input-group me-2 " style="width: 200px;">
+                    <span class="input-group-text ">โต๊ะ</span>
+                    <input type="number" class="form-control" [(ngModel)]="tableNo">
                 </div>
-                <div class="card-body">
-                    <button class="btn btn-primary me-1" (click)="filterFoods()">
-                        <i class="fas fa-utensils me-2"></i>อาหาร
-                    </button>
-                    <button class="btn btn-success me-1" (click)="filterDrinks()">
-                        <i class="fas fa-wine-glass me-2"></i>เครื่องดื่ม
-                    </button>
-                    <button class="btn btn-success">
-                        <i class="fas fa-check me-2"></i> ทั้งหมด
-                    </button>
 
+                <!-- Food Button -->
+                <button class="btn btn-primary me-2" (click)="filterFoods()">
+                    <i class="fas fa-utensils me-1"></i>อาหาร
+                </button>
 
-                    <div class="row mt-3">
-                        @for (item of foods; track $index) {
-                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-sm-12">
-                            <div class="card">
-                                <img class="card-image" src="{{apiPath}}/uploads/{{item.img}}" height="150px"  style="object-fit: fill;">
-                                <div class="card-body">
-                                    <div class="text-center h5">{{ item.name }}</div>
-                                    <div class="text-success t-3 text-center">{{ item.price }} บาท </div>
+                <!-- Drinks Button -->
+                <button class="btn btn-success me-2" (click)="filterDrinks()">
+                    <i class="fas fa-wine-glass me-1"></i>เครื่องดื่ม
+                </button>
+
+                <!-- All Items Button -->
+                <button class="btn btn-info me-2" (click)="fetchData()">
+                    <i class="fas fa-check me-1"></i>ทั้งหมด
+                </button>
+
+                <!-- All Items Button -->
+                <button class="btn btn-danger me-4" (click)="clearAllRow()">
+                    <i class="fas fa-check me-1"></i>ล้างรายการ
+                </button>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row mt-3">
+                            @for (item of foods; track $index) {
+                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-sm-12">
+                                <div class="card">
+                                    <img (click)="saveToSaleTemp(item)" class="card-image"
+                                        [src]="apiPath + '/uploads/' + item.img" height="150px"
+                                        style="object-fit: fill;">
+                                    <div class="card-body">
+                                        <div class="text-center h5">{{ item.name }}</div>
+                                        <div class="text-success t-3 text-center">{{ item.price }} บาท </div>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="alert bg-dark text-white text-end h3 mt-3">Total :
+                            {{amount.toLocaleString('th-TH')}} ฿
+                        </div>
+                        @for (item of saleTemps; track $index) {
+                        <div class="card">
+                            <div class="card-body">
+                                <div>Table No. {{item.tableNo}}</div>
+                                <div>ชื่อ : {{item.Food.name}}</div>
+                                <div>จำนวน : {{item.price}} X {{item.qty}} = {{item.price * item.qty}}</div>
+                                <div class="mt-2">
+                                    <div class="input-group">
+                                        <button class="btn btn-success"  (click)="changeQty(item.id, 'down')"> <i class="fas fa-minus "></i></button>
+                                        <input type="text" disabled class="form-control text-center "
+                                            [value]="item.qty">
+                                        <button class="btn btn-success"  (click)="changeQty(item.id, 'up')"> <i class="fas fa-plus "></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <button class="btn btn-danger btn-block " (click)=" removeItem(item)">
+                                            <i class="fa-duotone fa-solid fa-times"></i> ลบ
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-success btn-block" 
+                                        (click)="chooseFoodSize(item)" data-bs-toggle="modal"
+                                        data-bs-target="#modalFoodSize">
+                                        <i class="fa-duotone fa-solid fa-bars"></i> ขนาด
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-warning btn-block" >
+                                            <i class="fa-solid fa-bowl-food"></i> รสชาติ
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -34,3 +100,19 @@
             </div>
         </div>
     </div>
+</div>
+
+
+
+<app-my-modal modalId="modalFoodSize" title="เลือกขนาด">
+    <div class="h4">{{foodName}}</div>
+ <div class="text-center">
+    @for (item of foodSizes; track $index) {
+   <button class="btn btn-success btn-lg me-2">
+  {{ item.name}}  
+  @if (item.moneyAdded > 0) { + {{ item.moneyAdded}}  บาท } 
+   </button>
+    }
+ </div>
+
+</app-my-modal>

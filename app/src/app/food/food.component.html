@@ -6,6 +6,7 @@
                     <h3>อาหาร</h3>
                 </div>
                 <div class="card-body">
+                    <div class="d-flex justify-content-start align-items-center mb-3">
                     <button class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#modalFood" (click)="clearForm()">
                         <i class="fas fa-plus me-2"></i>เพิ่มอาหาร
                     </button>
@@ -15,9 +16,10 @@
                    <button class="btn btn-success me-1" (click)="filterDrinks()">
                     <i class="fas fa-wine-glass me-2"></i>เครื่องดื่ม
                    </button>
-                   <button class="btn btn-success" (click)="filterAll()">
+                   <button class="btn btn-success  me-2" (click)="filterAll()">
                     <i class="fas fa-check me-2"></i> ทั้งหมด
                    </button>
+                </div>
                     <!-- Table to display food sizes -->
                     <table class="mt-3 table table-bordered table-striped">
                         <thead class="thead-dark">

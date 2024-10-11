@@ -1,6 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const { create, update } = require("./FoodTypeController");
-const { error } = require("console");
 const prisma = new PrismaClient();
 
 module.exports = {
@@ -12,7 +10,7 @@ module.exports = {
           name: req.body.name,
           remark: req.body.remark,
           price: req.body.price,
-          img: req.body.img?? "",
+          img: req.body.img ?? "",
           foodType: req.body.foodType,
           status: "use"
         }
@@ -104,15 +102,15 @@ module.exports = {
     } catch (e) {
       return res.status(500).send({ error: e.message });
     }
-  }, 
-  filter : async (req,res) => {
+  },
+  filter: async (req, res) => {
     try {
       const rows = await prisma.food.findMany({
         include: {
           FoodType: true
         },
         where: {
-          foodType : req.params.foodType,
+          foodType: req.params.foodType,
           status: "use"
         },
         orderBy: {
@@ -123,8 +121,27 @@ module.exports = {
     } catch (e) {
       return res.status(500).send({ error: e.message });
     }
-
-
-
+  },
+  search: async (req, res) => {
+    try {
+      const rows = await prisma.food.findMany({
+        include: {
+          FoodType: true
+        },
+        where: {
+          OR: [
+            { name: { contains: req.query.keyword, mode: "insensitive" } },
+            { foodTypeId: parseInt(req.query.foodTypeId) }
+          ],
+          status: "use"
+        },
+        orderBy: {
+          id: "desc"
+        }
+      });
+      return res.send({ results: rows });
+    } catch (e) {
+      return res.status(500).send({ error: e.message });
+    }
   }
 };

@@ -64,10 +64,27 @@ module.exports = {
           foodTypeId: req.body.foodTypeId
         },
         where: {
-          id: req.body.id,
+          id: req.body.id
         }
-      })
-     return res.send({ message: "Update success" });
+      });
+      return res.send({ message: "Update success" });
+    } catch (e) {
+      return res.status(500).send({ error: e.message });
+    }
+  },
+  filter: async (req, res) => {
+    try {
+      const rows = await prisma.foodSize.findMany({
+        where: {
+          foodTypeId: parseInt(req.params.foodTypeId),
+          status: "use",
+        },
+        orderBy: {
+          moneyAdded: "asc",
+        },
+      });
+
+      return res.send({ results: rows });
     } catch (e) {
       return res.status(500).send({ error: e.message });
     }

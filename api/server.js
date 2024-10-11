@@ -13,6 +13,7 @@ const foodTypeController = require('./Controller/FoodTypeController');
 const foodSizeController = require('./Controller/FoodSizeController');
 const tasteController = require('./Controller/TasteController');
 const foodController = require('./Controller/FoodController');
+const saleTemplateController = require('./Controller/SaleTempController');
 const app = express();
 
 // Middleware
@@ -60,6 +61,9 @@ app.put('/api/foodSize/update', (req, res) => {
    foodSizeController.update(req, res);
 });
 
+app.get('/api/foodSize/filter/:foodTypeId', (req, res) => {
+  foodSizeController.filter(req, res);
+});
 app.post('/api/taste/create', (req, res) => {
     tasteController.create(req, res);
 })
@@ -94,10 +98,33 @@ app.put('/api/food/update', (req, res) =>{
     foodController.update(req, res);
 })
 
-
 app.get('/api/food/filter/:foodType', (req, res) => {
     foodController.filter(req, res);
 });
+app.get('/api/food/search/:name', (req, res) => {
+    foodController.search(req, res);
+});
+
+
+app.post('/api/saleTemp/create', (req, res) => {
+    saleTemplateController.create(req, res);
+})
+
+app.get('/api/saleTemp/list/:userId', (req, res) => {
+    saleTemplateController.list(req, res);
+});
+
+app.delete('/api/saleTemp/clear/:userId', (req, res) => {
+    saleTemplateController.clear(req, res);
+})
+
+app.delete('/api/saleTemp/remove/:foodId/:userId', (req, res) => {
+    saleTemplateController.remove(req, res);
+})
+
+app.put('/api/saleTemp/changeQty', (req, res) => {
+    saleTemplateController.changeQty(req, res);
+})
 
 // Error handling middleware
 app.use((err, req, res, next) => {
