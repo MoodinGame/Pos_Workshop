@@ -1,31 +1,23 @@
-@if (token == undefined )
-{
-<div class="container">
-    <div class="row justify-content-center ">
-      <div class="col-md-6 mt-5 ">
-        <div class="card shadow-lg rounded-lg border-0">
-          <div class="card-header bg-primary text-white text-center py-4 rounded-top">
-            <h3>Sign In to Backoffice</h3>
+@if (token == undefined) {
+  <div class="card m-5 mt-3">
+      <div class="card-header bg-primary">Sign In to BackOffice</div>
+      <div class="card-body p-5">
+          <div>
+              <div>Username</div>
+              <input class="form-control" [(ngModel)]="username" />
           </div>
-          <div class="card-body p-4">
-              <div class="mb-4">
-                <label for="Username" class="form-label">Username</label>
-                <input type="text" class="form-control form-control-lg"  placeholder="Enter Username"   [(ngModel)]="username" >
-              </div>
-              <div class="mb-4">
-                <label for="pwd" class="form-label">Password</label>
-                <input type="password" class="form-control form-control-lg"  placeholder="Enter Password" [(ngModel)]="password" >
-              </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg" (click)="signIn()" >Submit</button>
-              </div>
+          <div class="mt-3">
+              <div>Password</div>
+              <input type="password" [(ngModel)]="password" class="form-control" />
           </div>
-        </div>
+          <div class="mt-3">
+              <button class="btn btn-primary" (click)="signIn()">
+                  <i class="fa fa-check me-2"></i>
+                  Sign In Now
+              </button>
+          </div>
       </div>
-    </div>
   </div>
-} @else
-{
-<div class="text-center h2">Welcome to Back Office</div>
+} @else {
+  <div class="text-center h2">Welcome to Back Office</div>
 }
-  

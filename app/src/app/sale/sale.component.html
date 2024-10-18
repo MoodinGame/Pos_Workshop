@@ -65,35 +65,31 @@
                                 <div>จำนวน : {{item.price}} X {{item.qty}} = {{item.price * item.qty}}</div>
                                 <div class="mt-2">
                                     <div class="input-group">
-                                        <button class="btn btn-success"  (click)="changeQty(item.id, 'down')"> <i class="fas fa-minus "></i></button>
+                                        <button class="btn btn-success" (click)="changeQty(item.id, 'down')"> <i
+                                                class="fas fa-minus "></i></button>
                                         <input type="text" disabled class="form-control text-center "
                                             [value]="item.qty">
-                                        <button class="btn btn-success"  (click)="changeQty(item.id, 'up')"> <i class="fas fa-plus "></i></button>
+                                        <button class="btn btn-success" (click)="changeQty(item.id, 'up')"> <i
+                                                class="fas fa-plus "></i></button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <div class="row">
+                            <div class="card-footer p-1">
+                                <div class="row g-1">
                                     <div class="col-4">
                                         <button class="btn btn-danger btn-block " (click)=" removeItem(item)">
                                             <i class="fa-duotone fa-solid fa-times"></i> ลบ
                                         </button>
                                     </div>
-                                    <div class="col-4">
-                                        <button class="btn btn-success btn-block" 
-                                        (click)="chooseFoodSize(item)" data-bs-toggle="modal"
-                                        data-bs-target="#modalFoodSize">
-                                        <i class="fa-duotone fa-solid fa-bars"></i> ขนาด
+                                    <div class="col-8">
+                                        <button class="btn btn-success btn-block" (click)="chooseFoodSize(item)"
+                                            data-bs-toggle="modal" data-bs-target="#modalFoodSize">
+                                            <i class="fa-duotone fa-solid fa-cog"></i> กำหนด
                                         </button>
                                     </div>
-                                    <div class="col-4">
-                                        <button class="btn btn-warning btn-block" >
-                                            <i class="fa-solid fa-bowl-food"></i> รสชาติ
-                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         }
                     </div>
                 </div>
@@ -104,15 +100,65 @@
 
 
 
-<app-my-modal modalId="modalFoodSize" title="เลือกขนาด">
-    <div class="h4">{{foodName}}</div>
- <div class="text-center">
-    @for (item of foodSizes; track $index) {
-   <button class="btn btn-success btn-lg me-2">
-  {{ item.name}}  
-  @if (item.moneyAdded > 0) { + {{ item.moneyAdded}}  บาท } 
-   </button>
-    }
- </div>
+<app-my-modal modalId="modalFoodSize" title="เลือกขนาด" modalSize="modal-xl">
+    <div class="h4">
+        <button class="btn btn-primary me-2" (click)="newSaleTempDetail()">
+            <i class="fa fa-plus me-2"></i>เพิ่มจำนวน
+        </button>
+        {{ foodName }}
+    </div>
+    <table class="mt-3 table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th width="50px"></th>
+                <th>รายการ</th>
+                <th width="320px" class="text-center">รสชาติ</th>
+                <th width="300px" class="text-center">เลือกขนาด</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of saleTempDetail; track $index) {
+                <tr>
+                    <td class="text-center">
+                        <button class="btn btn-danger"  (click)="removeSaleTempDetail(item.id)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </td>
+                    <td>{{ item.Food.name }}</td>
+                    <td class="text-center">
+                        @for (taste of tastes; track $index) {
 
+                        @if (taste.id === item.tasteId) {
+                            <button class="btn btn-primary me-2" >
+                                {{taste.name}}
+                        </button>
+                        }@else {
+                            <button class="btn btn-outline-primary me-1" (click)="selectedTaste(item.id , taste.id)">
+                                {{taste.name}}
+                        </button>
+                        }
+                    }
+                    </td>
+                    <td class="text-center">
+                        @for (foodSize of foodSizes; track $index) {
+                            @if (foodSize.moneyAdded > 0) {
+                                @if (foodSize.moneyAdded != item.addedMoney) {
+                                    <button class="btn btn-outline-primary me-1"
+                                        (click)="selectedFoodSize(item.id, foodSize.id)">
+                                        {{ foodSize.name }}
+                                        +{{ foodSize.moneyAdded }} บาท
+                                    </button>
+                                } @else {
+                                    <button class="btn btn-primary me-2">
+                                        {{ foodSize.name }}
+                                        +{{ foodSize.moneyAdded }} บาท
+                                    </button>
+                                    }
+                                    }
+                                    }
+                    </td>
+                </tr>
+                }
+        </tbody>
+    </table>
 </app-my-modal>

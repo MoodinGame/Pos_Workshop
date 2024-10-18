@@ -15,11 +15,12 @@ export class SignInComponent implements OnInit {
   username: string = '';
   password: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    
+  }
 
   ngOnInit() {
     if (this.isBrowser()) {
-      // Your logic to access localStorage
       this.token = localStorage.getItem('angular_token')!;
     }
   }

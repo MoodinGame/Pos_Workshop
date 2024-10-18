@@ -59,12 +59,28 @@ module.exports = {
           foodTypeId: req.body.foodTypeId
         },
         where: {
-          id: req.body.id,
+          id: req.body.id
         }
       });
       return res.send({ message: "Update success" });
     } catch (e) {
       return res.status(500).send({ error: e.message });
+    }
+  },
+  listByFoodTypeId: async (req, res) => {
+    try {
+      const rows = await prisma.taste.findMany({
+        where: {
+          foodTypeId: parseInt(req.params.foodTypeId),
+          status: "use"
+        },
+        orderBy: {
+          name: "asc"
+        }
+      });
+      return res.send({ results: rows });
+    } catch (e) {
+      return res.status(500).send({ message: e.message });
     }
   }
 };

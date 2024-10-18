@@ -12,12 +12,15 @@ import { RouterLink } from '@angular/router';
 export class SidebarComponent {
   name: string = '';
 
-
-
   ngOnInit() {
-    this.name = localStorage.getItem('angular_name')!;
+    if (this.isBrowser()) {
+      this.name = localStorage.getItem('angular_name')!;
+    }
   }
 
+  isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
 
   async signout() {
     const button = await Swal.fire({

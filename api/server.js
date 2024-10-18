@@ -27,7 +27,7 @@ app.use('/uploads' , express.static('./uploads'))
 // Routes
 
 app.post('/api/user/signin', (req, res) => {
-    userController.signIn(req, res);
+    userController.signin(req, res);
 });
 
 app.post('/api/FoodType/create', (req, res) => {
@@ -83,6 +83,13 @@ app.put('/api/taste/update', (req, res) =>{
 app.post('/api/food/create', (req, res) => {
     foodController.create(req, res);
 })
+
+app.get('/api/taste/listByFoodTypeId/:foodTypeId', (req, res) =>{
+    tasteController.listByFoodTypeId(req, res);
+})
+
+
+
 app.post('/api/food/upload', (req, res) => {
     foodController.upload(req, res);
 })
@@ -124,6 +131,30 @@ app.delete('/api/saleTemp/remove/:foodId/:userId', (req, res) => {
 
 app.put('/api/saleTemp/changeQty', (req, res) => {
     saleTemplateController.changeQty(req, res);
+})
+
+app.post('/api/saleTemp/createDetail/' , (req, res) => {
+    saleTemplateController.createDetail(req, res);
+}) 
+
+app.get('/api/saleTemp/listSaleTempDetail/:saleTempId' , (req,res) => {
+    saleTemplateController.listSaleTempDetail(req, res);
+})
+
+app.post('/api/saleTemp/updatefoodSize/' , (req, res) => {
+    saleTemplateController.updateFoodSize(req, res);
+}) 
+
+app.post('/api/saleTemp/updateTaste/' , (req, res) => {
+    saleTemplateController.updateTaste(req, res);
+})
+
+app.post('/api/saleTemp/newSaleTempDetail' , (req, res) => {
+    saleTemplateController.newSaleTempDetail(req, res);
+})
+
+app.delete('/api/saleTemp/removeSaleTempDetail/:id' , (req, res) => {
+    saleTemplateController.removeSaleTempDetail(req, res);
 })
 
 // Error handling middleware

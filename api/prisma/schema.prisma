@@ -52,34 +52,36 @@ model Taste {
 }
 
 model Food {
-  id         Int        @id @default(autoincrement())
-  foodTypeId Int
-  name       String
-  remark     String?
-  price      Int
-  img        String
-  foodType   String     @default("food")
-  status     String     @default("use")
-  FoodType   FoodType   @relation(fields: [foodTypeId], references: [id])
-  SaleTemps   SaleTemp[]
-  SaleDetails SaleTempDetail[]
+  id              Int              @id @default(autoincrement())
+  foodTypeId      Int
+  name            String
+  remark          String?
+  price           Int
+  img             String
+  foodType        String           @default("food")
+  status          String           @default("use")
+  FoodType        FoodType         @relation(fields: [foodTypeId], references: [id])
+  SaleTemps       SaleTemp[]
+  SaleTempDetails SaleTempDetail[]
 }
 
 model SaleTemp {
-  id      Int  @id @default(autoincrement())
-  foodId  Int
-  qty     Int
-  price   Int
+  id Int @id() @default(autoincrement())
+  foodId Int
+  qty Int 
+  price Int 
   tableNo Int
-  userId  Int
-  Food    Food @relation(fields: [foodId], references: [id])
+  userId Int
+  Food Food @relation(fields: [foodId], references: [id])
+  SaleTempDetails SaleTempDetail[]
 }
 
 model SaleTempDetail {
-   id        Int      @id @default(autoincrement())
-   saleTempId Int
-   addedMoney Int?
-   tasteId   Int?
-   foodId Int
-   Food Food @relation(fields: [foodId], references: [id])
+  id Int @id() @default(autoincrement())
+  saleTempId Int 
+  addedMoney Int?
+  tasteId Int?
+  foodId Int 
+  Food Food @relation(fields: [foodId], references: [id])
+  SaleTemp SaleTemp @relation(fields: [saleTempId], references: [id])
 }
