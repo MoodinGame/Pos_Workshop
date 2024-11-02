@@ -49,7 +49,7 @@ module.exports = {
       const row = await prisma.saleTemp.findMany({
         include: {
           Food: true,
-          SaleTempDetails : true,
+          SaleTempDetails: true
         },
         where: {
           userId: parseInt(req.params.userId)
@@ -67,8 +67,8 @@ module.exports = {
     try {
       await prisma.saleTemp.deleteMany({
         where: {
-          userId: parseInt(req.params.userId),
-        },
+          userId: parseInt(req.params.userId)
+        }
       });
       return res.send({ message: "success" });
     } catch (e) {
@@ -77,12 +77,36 @@ module.exports = {
   },
   remove: async (req, res) => {
     try {
-      await prisma.saleTemp.deleteMany({
+      const saleTemps = await prisma.saleTemp.findMany({
+        include: {
+          SaleTempDetails: true
+        },
         where: {
-          foodId: parseInt(req.params.foodId),
-          userId: parseInt(req.params.userId)
+          userId: parseInt(req.params.userId),
+          foodId: parseInt(req.params.foodId)
         }
       });
+
+      console.log(saleTemps);
+
+      for (let i = 0; i < saleTemps.length; i++) {
+        if (saleTemps[i].SaleTempDetails.length > 0) {
+          const saleTempId = saleTemps[i].id;
+
+          await prisma.saleTempDetail.deleteMany({
+            where: {
+              saleTempId: saleTempId
+            }
+          });
+        }
+      }
+      await prisma.saleTemp.deleteMany({
+        where: {
+          userId: parseInt(req.params.userId),
+          foodId: parseInt(req.params.foodId)
+        }
+      });
+
       return res.send({ message: "Success" });
     } catch (e) {
       return res.status(500).send({ message: e.message });
@@ -162,20 +186,19 @@ module.exports = {
           id: "desc"
         }
       });
-        
-      const arr = []
+
+      const arr = [];
 
       for (let i = 0; i < rows.length; i++) {
         const item = rows[i];
-        
+
         if (item.tasteId != null) {
-          
-         const taste = await prisma.taste.findFirst({
+          const taste = await prisma.taste.findFirst({
             where: {
               id: item.tasteId
             }
-          })
-          item.tasteName = taste.name
+          });
+          item.tasteName = taste.name;
         }
         arr.push(item);
       }
@@ -206,44 +229,44 @@ module.exports = {
       return res.status(500).send({ message: e.message });
     }
   },
-  updateTaste : async (req , res) => {
+  updateTaste: async (req, res) => {
     try {
       await prisma.saleTempDetail.update({
-        data : {
-         tasteId: req.body.tasteId
+        data: {
+          tasteId: req.body.tasteId
         },
-        where : {
-          id : req.body.saleTempId
+        where: {
+          id: req.body.saleTempId
         }
       });
-      return res.send({ message : "success" });
+      return res.send({ message: "success" });
     } catch (e) {
       return res.status(500).send({ message: e.message });
     }
   },
-  newSaleTempDetail : async (req , res ) => {
+  newSaleTempDetail: async (req, res) => {
     try {
       await prisma.saleTempDetail.create({
-        data : {
+        data: {
           saleTempId: req.body.saleTempId,
-          foodId: req.body.foodId,        
-        }
-      })
-      return res.send({ message : "success" });
-    } catch (e) {
-      return res.status(500).send({ message : e.message})
-    }
-  },
-  removeSaleTempDetail : async (req , res ) => {
-    try {
-      await prisma.saleTempDetail.delete({
-        where : {
-          id : parseInt(req.params.id)
+          foodId: req.body.foodId
         }
       });
-      return res.send({ message : "success" });
+      return res.send({ message: "success" });
     } catch (e) {
-      return res.status(500).send({ message : e.message} );
+      return res.status(500).send({ message: e.message });
+    }
+  },
+  removeSaleTempDetail: async (req, res) => {
+    try {
+      await prisma.saleTempDetail.delete({
+        where: {
+          id: parseInt(req.params.id)
+        }
+      });
+      return res.send({ message: "success" });
+    } catch (e) {
+      return res.status(500).send({ message: e.message });
     }
   }
 };

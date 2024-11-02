@@ -19,16 +19,78 @@ export class SaleComponent {
   tastes: any = [];
   saleTemps: any = [];
   foodSizes: any = [];
-  foodName: string = '';
   saleTempDetail: any = [];
+  foodName: string = '';
   apiPath: string = ''
+  payType: string = 'cash';
   tableNo: number = 1;
   saleTempId: number = 0;
   userId: number | undefined = 0;
   amount: number = 0;
   foodId: number | undefined = 0;
+  inputMoney: number = 0;
+  returnMoney: number = 0;
 
 
+  endSale(){
+   try {
+    const payload = {
+      userId : this.userId,
+      amount : this.amount,
+      inputMoney : this.inputMoney,
+      returnMoney: this.returnMoney,
+      payType : this.payType,
+      tableNo : this.tableNo
+    }
+    this.http.post(config.apiServer + '/api/saleTemp/endSale', payload)
+    .subscribe((res : any) => {
+      this.fetchDataSaleTemp()
+    })
+    
+   } catch (e : any) {
+     Swal.fire({
+       title: 'error',
+       text: e.message,
+       icon: 'error',
+     });
+   }
+
+
+
+
+  }
+
+  changeInputMoney(inputMoney: number) {
+    this.inputMoney = inputMoney;
+    this.returnMoney = this.inputMoney - this.amount;
+  }
+
+  selectedPayType(payType: string) {
+    this.payType = payType;
+  }
+
+  getClassNameOfButtons(inputMoney: number) {
+    let cssClass = 'btn btn-block'
+    if (this.inputMoney == inputMoney) {
+      cssClass += ' btn-secondary'
+    } else {
+      cssClass += ' btn-outline-secondary'
+    }
+
+    return cssClass
+
+  }
+
+  getClassName(payType: string) {
+    let cssClass = 'btn btn-block btn-lg'
+    if (this.payType == payType) {
+      cssClass += ' btn-secondary'
+    } else {
+      cssClass += ' btn-outline-secondary'
+    }
+    return cssClass
+
+  }
 
   constructor(private http: HttpClient) {
 
@@ -78,7 +140,6 @@ export class SaleComponent {
     }
   }
 
-
   chooseFoodSize(item: any) {
     let foodTypeId: number = item.Food.foodTypeId;
     this.saleTempId = item.id;
@@ -114,7 +175,6 @@ export class SaleComponent {
     }
   }
 
-
   fetchDataSaleTempDetail() {
     this.http
       .get(
@@ -125,7 +185,6 @@ export class SaleComponent {
         this.computeAmount();
       });
   }
-
 
   computeAmount() {
     this.amount = 0;
@@ -138,7 +197,6 @@ export class SaleComponent {
       this.amount += totalPerRow;
     }
   }
-
 
   ngOnInit() {
     this.fetchData()
@@ -219,6 +277,20 @@ export class SaleComponent {
       this.http.get(config.apiServer + '/api/saleTemp/list/' + this.userId)
         .subscribe((res: any) => {
           this.saleTemps = res.results;
+
+
+          for (let i = 0; i < this.saleTemps.length; i++) {
+            const item = this.saleTemps[i];
+
+            if (item.SaleTempDetails.length > 0) {
+              item.qty = item.SaleTempDetails.length;
+              item.disabledQtyButton = true;
+            }
+
+          }
+
+
+
           this.computeAmount();
         })
     } catch (e: any) {
@@ -310,19 +382,20 @@ export class SaleComponent {
     }
   }
 
-  newSaleTempDetail(){
+  newSaleTempDetail() {
     try {
       const payload = {
-        saleTempId : this.saleTempId,
-        foodId : this.foodId
+        saleTempId: this.saleTempId,
+        foodId: this.foodId
       }
 
       this.http
-      .post(config.apiServer + '/api/saleTemp/newSaleTempDetail', payload)
-      .subscribe((res: any) => {
-         this.fetchDataSaleTempDetail();
-       });
-    } catch (e:any) {
+        .post(config.apiServer + '/api/saleTemp/newSaleTempDetail', payload)
+        .subscribe((res: any) => {
+          this.fetchDataSaleTempDetail();
+          this.fetchDataSaleTemp();
+        });
+    } catch (e: any) {
       Swal.fire({
         title: 'Error',
         text: e.message,
@@ -330,7 +403,7 @@ export class SaleComponent {
       });
     }
   }
-  async removeSaleTempDetail(id : number){
+  async removeSaleTempDetail(id: number) {
     try {
       const button = await Swal.fire({
         title: 'ลบรายการ',
@@ -343,12 +416,12 @@ export class SaleComponent {
 
       if (button.isConfirmed) {
         this.http.delete(config.apiServer + '/api/saleTemp/removeSaleTempDetail/' + id)
-        .subscribe((res : any) => {
-          this.fetchDataSaleTempDetail();
-          this.fetchDataSaleTemp();
-        })
+          .subscribe((res: any) => {
+            this.fetchDataSaleTempDetail();
+            this.fetchDataSaleTemp();
+          })
       }
-    } catch (e : any) {
+    } catch (e: any) {
       Swal.fire({
         title: 'Error',
         text: e.message,
