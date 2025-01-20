@@ -1,5 +1,4 @@
 const config = {
-
     apiServer: 'http://localhost:3000',
 };
 
