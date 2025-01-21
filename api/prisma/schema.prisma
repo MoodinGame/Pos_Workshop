@@ -112,5 +112,16 @@ model BillSaleDetail {
   moneyAdded Int?
   BillSale BillSale @relation(fields: [billSaleId], references: [id])
   Food Food @relation(fields: [foodId], references: [id])
+}
 
+model Organization {
+  id Int @id() @default(autoincrement())
+  name String 
+  address String 
+  phone String?
+  email String?
+  website String?
+  promptPay String?
+  logo String?
+  taxCode String
 }

@@ -177,6 +177,10 @@ app.get("/api/organization/info", (req, res) => {
   organizationController.info(req, res);
 });
 
+app.post("/api/organization/upload", (req, res) => {
+  organizationController.upload(req, res);
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

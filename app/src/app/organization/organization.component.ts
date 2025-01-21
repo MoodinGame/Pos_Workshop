@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import config from '../config';
 import Swal from 'sweetalert2';
+import { firstValueFrom } from 'rxjs';
+
 
 @Component({
   selector: 'app-organization',
@@ -23,6 +25,7 @@ export class OrganizationComponent {
   promptPay : string = '';
   logo : string = '';
   txtCode : string = '';
+  myFiles : any ;
 
 
   ngOnInit() {
@@ -40,7 +43,8 @@ export class OrganizationComponent {
   }
 
   save(){
-    try {
+     console.log("test");
+     try {
       const playload = {
         id : this.id,
         name : this.name,
@@ -59,7 +63,7 @@ export class OrganizationComponent {
       title: 'บันทึกข้อมูลเรียบร้อย',
       text: 'ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว',
       showCancelButton: false,
-      timer: 0,
+      timer: 1500,
       })
     });
     } catch (e : any) {
@@ -70,4 +74,5 @@ export class OrganizationComponent {
       });
     }
   }
+
 }
