@@ -43,7 +43,6 @@ export class OrganizationComponent {
   }
 
   save(){
-     console.log("test");
      try {
       const playload = {
         id : this.id,
