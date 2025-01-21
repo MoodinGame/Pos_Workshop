@@ -1,77 +1,99 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import config from '../config';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
 
-
 @Component({
   selector: 'app-organization',
   standalone: true,
-  imports: [FormsModule ],
+  imports: [FormsModule],
   templateUrl: './organization.component.html',
   styleUrl: './organization.component.css'
 })
 export class OrganizationComponent {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient){}
 
-  id : number = 0;
-  name : string = '';
-  address : string = '';
-  phone : string = '';
-  email : string = '';
-  website : string = '';
-  promptPay : string = '';
-  logo : string = '';
-  txtCode : string = '';
-  myFiles : any ;
-
+  name: string ='';
+  phone: string = '';
+  address: string = '';
+  taxCode: string = '';
+  id: number = 0;
+  logo: string = '';
+  email: string = '';
+  website: string = '';
+  promptPay: string = '';
+  myFile: any;
+  logoPath: string = '';
 
   ngOnInit() {
-    this.http.get(config.apiServer + 'api/organization/info').subscribe((data: any) => {
-      this.id = data.id;
+    this.http.get(config.apiServer + '/api/organization/info')
+    .subscribe((data: any) => {
       this.name = data.name;
-      this.address = data.address;
       this.phone = data.phone;
+      this.address = data.address;
+      this.taxCode = data.taxCode;
+      this.id = data.id;
+      this.logo = data.logo;
       this.email = data.email;
       this.website = data.website;
       this.promptPay = data.promptPay;
-      this.logo = data.logo;
-      this.txtCode = data.txtCode;
-    });
+      this.logoPath = config.apiServer + '/uploads/' + this.logo;
+    })
   }
 
-  save(){
-     try {
-      const playload = {
-        id : this.id,
-        name : this.name,
-        address : this.address,
-        phone : this.phone,
-        email : this.email,
-        website : this.website,
-        promptPay : this.promptPay,
-        logo : this.logo,
-        txtCode : this.txtCode
+  async save() {
+    try {
+      // const fileName = await this.upload();
+      const payload = {
+        name: this.name,
+        phone: this.phone,
+        address: this.address,
+        taxCode: this.taxCode,
+        id: this.id,
+        logo: this.logo,
+        email: this.email,
+        website: this.website,
+        promptPay: this.promptPay
       }
-      
-    this.http.post(config.apiServer + 'api/organization/save', playload).subscribe((data: any) => {
-      Swal.fire({
-      icon: 'success',
-      title: 'บันทึกข้อมูลเรียบร้อย',
-      text: 'ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว',
-      showCancelButton: false,
-      timer: 1500,
+
+      this.http.post(config.apiServer + '/api/organization/save', payload)
+      .subscribe((data: any) => {
+        Swal.fire({
+          icon: 'success',
+          text: 'บันทึกข้อมูลสำเร็จ',
+          title: 'บันทึกข้อมูล',
+          showConfirmButton: true,
+          timer: 1500
+        })
       })
-    });
-    } catch (e : any) {
+    } catch (e: any) {
       Swal.fire({
-        icon: 'error',
-        title: e.message,
-        text: 'error',
-      });
+        title: 'error',
+        text: e.message,
+        icon: 'error'
+      })
     }
-  }
+  } 
+
+  // onFileChange(event: any) {
+  //   if (event.target.files != null) {
+  //     if (event.target.files.length > 0) {
+  //       this.myFile = event.target.files[0];
+  //     }
+  //   }
+  // }
+
+  // async upload() { 
+  //   if (this.myFile !== undefined) {
+  //     const formData = new FormData();
+  //     formData.append('myFile', this.myFile);
+  //     const url = config.apiServer + '/api/organization/upload';
+  //     const res:any = await firstValueFrom(this.http.post(url, formData));
+
+  //     return res.fileName;
+  //   }
+  // }
 
 }
