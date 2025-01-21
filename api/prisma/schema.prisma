@@ -109,6 +109,7 @@ model BillSaleDetail {
   foodId Int 
   foodSizeId Int?
   tasteId Int?
+  price Int?
   moneyAdded Int?
   BillSale BillSale @relation(fields: [billSaleId], references: [id])
   Food Food @relation(fields: [foodId], references: [id])
