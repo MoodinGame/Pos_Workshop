@@ -44,9 +44,7 @@ export class SaleComponent {
     }
     this.http.post(config.apiServer + '/api/saleTemp/endSale', payload)
     .subscribe((res : any) => {
-      this.fetchDataSaleTemp();
-       document.getElementById('modalEndSale_btnClose')?.click();
-        this.clearForm();
+      this.fetchDataSaleTemp()
     })
     
    } catch (e : any) {
@@ -58,15 +56,9 @@ export class SaleComponent {
    }
 
 
-  }
 
-  clearForm() {
-    this.payType='cash';
-    this.inputMoney=0;
-    this.returnMoney=0;
-    this.amount=0;
-  }
 
+  }
 
   changeInputMoney(inputMoney: number) {
     this.inputMoney = inputMoney;
