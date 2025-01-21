@@ -28,9 +28,16 @@
                 </button>
 
                 <!-- All Items Button -->
-                <button class="btn btn-danger me-4" (click)="clearAllRow()">
+                <button class="btn btn-danger me-2" (click)="clearAllRow()">
                     <i class="fas fa-check me-1"></i>ล้างรายการ
                 </button>
+
+                 @if (amount > 0 ) {
+                    <button class="btn btn-outline-success me-4" (click)="printBillBeforePay()" >
+                        <i class="fas fa-print me-1"></i> พิมพ์ใบเเจ้งยอด
+                    </button>
+                 }
+
             </div>
 
             <div class="container-fluid">

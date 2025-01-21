@@ -30,6 +30,7 @@ export class SaleComponent {
   foodId: number | undefined = 0;
   inputMoney: number = 0;
   returnMoney: number = 0;
+  billForPayURL : string = '';
 
 
   endSale(){
@@ -436,4 +437,30 @@ export class SaleComponent {
       })
     }
   }
+
+ async printBillBeforePay() {
+
+  try {
+    const payload = {
+      userId : this.userId,
+      tableNo : this.tableNo
+    }
+
+    this.http.post(config.apiServer + '/api/saleTemp/printBillBeforePay', payload)
+    .subscribe((res : any) => {
+     this.billForPayURL = res.url;
+    })
+  } catch (e : any) {
+    Swal.fire({
+      title: 'error',
+      text: e.message,
+      icon: 'error',
+    })
+    
+  }
+
+
+ }
+
+
 }
