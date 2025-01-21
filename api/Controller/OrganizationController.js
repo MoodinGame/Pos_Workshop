@@ -9,7 +9,6 @@ module.exports = {
 
             const organization = await prisma.organization.findFirst();
 
-            
             const playload = {
                 name: req.body.name,
                 address: req.body.address,
@@ -21,6 +20,7 @@ module.exports = {
                 website: req.body.website ?? '',
                 promptPay: req.body.promptPay ?? ''
             }
+
 
             if (organization) {
                 await prisma.organization.update({
@@ -52,27 +52,27 @@ module.exports = {
     },
     upload: async (req, res) => {
         try {
-
-            // อัพโหลดไฟล์
             const myFile = req.files.myFile;
-            const name = myFile.name;
+            const fileName = myFile.name;
 
-            // เปลี่ยนชื่อไฟล์
-            const extation = name.split('.').pop();
-            const newName = new Date().getTime() + '.' + extation;
+            // rename file
+            const extention = fileName.split('.').pop();
+            const newName = new Date().getTime() + '.' + extention;
 
-            // ย้ายไฟล์
-            myFile.mv('./public/' + newName, (err) => {
+            // move file to public folder
+            myFile.mv('uploads/' + newName, (err) => {
                 if (err) {
-                    return res.status(500).send({ message: "Error" })
+                    throw err;
                 }
             })
-            return res.send({ message: "Success", data: newName })
-        } catch (e) {
-            return res.status(500).send({ error: e.message });
-        }
 
-    }
+            return res.send({ message: 'success', fileName: newName });
+        } catch (e) {
+            return res.status(500).send({ error: e.message })
+        }
+    },
+
+
 };
 
 

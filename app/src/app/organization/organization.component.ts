@@ -45,14 +45,14 @@ export class OrganizationComponent {
 
   async save() {
     try {
-      // const fileName = await this.upload();
+      const fileName = await this.upload();
       const payload = {
         name: this.name,
         phone: this.phone,
         address: this.address,
         taxCode: this.taxCode,
         id: this.id,
-        logo: this.logo,
+        logo: fileName,
         email: this.email,
         website: this.website,
         promptPay: this.promptPay
@@ -77,23 +77,25 @@ export class OrganizationComponent {
     }
   } 
 
-  // onFileChange(event: any) {
-  //   if (event.target.files != null) {
-  //     if (event.target.files.length > 0) {
-  //       this.myFile = event.target.files[0];
-  //     }
-  //   }
-  // }
 
-  // async upload() { 
-  //   if (this.myFile !== undefined) {
-  //     const formData = new FormData();
-  //     formData.append('myFile', this.myFile);
-  //     const url = config.apiServer + '/api/organization/upload';
-  //     const res:any = await firstValueFrom(this.http.post(url, formData));
+// อัพโหลดไฟล์
 
-  //     return res.fileName;
-  //   }
-  // }
+  onFileChange(event: any) {
+    if (event.target.files != null) {
+      if (event.target.files.length > 0) {
+        this.myFile = event.target.files[0];
+      }
+    }
+  }
+
+  async upload() { 
+    if (this.myFile !== undefined) {
+      const formData = new FormData();
+      formData.append('myFile', this.myFile);
+      const url = config.apiServer + '/api/organization/upload';
+      const res:any = await firstValueFrom(this.http.post(url, formData));
+      return res.fileName;
+    }
+  }
 
 }

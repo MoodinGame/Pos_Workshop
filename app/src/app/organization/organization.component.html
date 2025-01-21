@@ -14,7 +14,10 @@
         <input type="text" class="form-control" [(ngModel)]="email">
 
         <div class="mt-3">รูปภาพ</div>
-        <input type="file" class="form-control" (change)="onFileChange($event)"> >
+        @if (logo !== '') {
+            <img [src]="logoPath" class="img-thumbnail" height="100px" width="100px" >
+        }
+        <input type="file" class="form-control" (change)="onFileChange($event)"> 
 
         <div class="mt-3">เลขผู้เสียภาษี</div>
         <input type="text" class="form-control" [(ngModel)]="taxCode">
