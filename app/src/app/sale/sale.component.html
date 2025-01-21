@@ -33,7 +33,7 @@
                 </button>
 
                  @if (amount > 0 ) {
-                    <button class="btn btn-outline-success me-4" (click)="printBillBeforePay()" >
+                    <button class="btn btn-outline-success me-4" data-bs-toggle="modal" data-bs-target="#modalBillForPay" (click)="printBillBeforePay()" >
                         <i class="fas fa-print me-1"></i> พิมพ์ใบเเจ้งยอด
                     </button>
                  }
@@ -68,7 +68,7 @@
 
                         @if (amount > 0) {
                         <button class="btn btn-primary btn-block btn-lg mb-2" data-bs-toggle="modal"
-                            data-bs-target="#modalEndSale">
+                            data-bs-target="#modalBillForPay">
                             สิ้นสุดการขาย
                             <i class="fa fa-check ms-2"></i>
                         </button>
@@ -249,4 +249,8 @@
 </div>
 
 
+</app-my-modal>
+
+<app-my-modal modalId="modalBillForPay" title="ใบเเจ้งรายการ">
+  <iframe src="pdf-frame" frameborder="0" style="height: 300px; width: 100%;"></iframe>
 </app-my-modal>
