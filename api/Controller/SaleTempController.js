@@ -270,7 +270,6 @@ module.exports = {
     }
   },
   endSale: async (req, res) => {
-
     try {
       const saleTemps = await prisma.saleTemp.findMany({
         include: {
@@ -299,7 +298,7 @@ module.exports = {
 
       for (let i = 0; i < saleTemps.length; i++) {
         const item = saleTemps[i];
-        
+
         if (item.SaleTempDetails > 0) {
           //have detail
 
@@ -327,7 +326,6 @@ module.exports = {
               foodId: item.foodId,
               price: item.Food.price
             }
-            
           });
         }
       }
@@ -354,5 +352,58 @@ module.exports = {
     } catch (e) {
       res.status(500).send({ message: e.message });
     }
+  },
+  printBillBeforePay: async (req, res) => {
+    try {
+      const organization = await prisma.organization.findFirst();
+
+      const saleTemps = await prisma.saleTemp.findMany({
+        include: {
+          Food: true,
+          SaleTempDetails: true
+        },
+        where: {
+          userId: req.body.userId,
+          tableNo: req.body.tableNo
+        }
+      });
+
+
+     const fs = require("fs");
+     const pdfkit = require("pdfkit");
+     const dayjs = require("dayjs");
+
+
+
+     const paperwidth = 80;
+     const paperpandding = 3;
+
+     const doc = new pdfkit({
+       size : [paperwidth, 200],
+        margin: {
+          top: 3,
+          bottom: 3,
+          left: 3,
+          right: 3
+        }
+     });
+  
+
+     const fileName = `uploads/bill-${dayjs().format("YYYY-MM-DD-HH-mm-ss")}.pdf`;
+     const font = "fonts/Kanit-Regular.ttf";
+
+     doc.pipe(fs.createWriteStream(fileName));
+
+     //display logo 
+
+     const imageWidth = 20;
+     const positionX = (paperwidth / 2) - ( imageWidth / 2);
+     
+
+
+
+
+
+    } catch (error) {}
   }
 };
