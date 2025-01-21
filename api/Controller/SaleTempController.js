@@ -268,5 +268,91 @@ module.exports = {
     } catch (e) {
       return res.status(500).send({ message: e.message });
     }
+  },
+  endSale: async (req, res) => {
+
+    try {
+      const saleTemps = await prisma.saleTemp.findMany({
+        include: {
+          SaleTempDetails: {
+            include: {
+              Food: true
+            }
+          },
+          Food: true
+        },
+        where: {
+          userId: req.body.userId
+        }
+      });
+
+      const billSale = await prisma.billSale.create({
+        data: {
+          amount: req.body.amount,
+          inputMoney: req.body.inputMoney,
+          payType: req.body.payType,
+          returnMoney: req.body.returnMoney,
+          tableNo: req.body.tableNo,
+          userId: req.body.userId
+        }
+      });
+
+      for (let i = 0; i < saleTemps.length; i++) {
+        const item = saleTemps[i];
+        
+        if (item.SaleTempDetails > 0) {
+          //have detail
+
+          for (let j = 0; j < item.SaleTempDetails.length; j++) {
+            const detail = item.SaleTempDetails[j];
+
+            console.log(detail.addedMoney);
+
+            await prisma.billSaleDetail.create({
+              data: {
+                billSaleId: billSale.id,
+                foodId: detail.foodId,
+                tasteId: detail.tasteId,
+                moneyAdded: detail.addedMoney,
+                price: detail.Food.price
+              }
+            });
+          }
+        } else {
+          console.log(item.Food.price);
+          //no detail
+          await prisma.billSaleDetail.create({
+            data: {
+              billSaleId: billSale.id,
+              foodId: item.foodId,
+              price: item.Food.price
+            }
+            
+          });
+        }
+      }
+
+      //clear saleTempDetail
+
+      for (let i = 0; i < saleTemps.length; i++) {
+        const item = saleTemps[i];
+
+        await prisma.saleTempDetail.deleteMany({
+          where: {
+            saleTempId: item.id
+          }
+        });
+      }
+
+      await prisma.saleTemp.deleteMany({
+        where: {
+          userId: req.body.userId
+        }
+      });
+
+      res.send({ message: "success" });
+    } catch (e) {
+      res.status(500).send({ message: e.message });
+    }
   }
 };
