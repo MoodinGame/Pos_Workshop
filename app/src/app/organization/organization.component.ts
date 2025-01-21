@@ -59,12 +59,9 @@ export class OrganizationComponent {
       title: 'บันทึกข้อมูลเรียบร้อย',
       text: 'ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว',
       showCancelButton: false,
-      timer: 1500,
+      timer: 0,
       })
     });
-
-
-
     } catch (e : any) {
       Swal.fire({
         icon: 'error',

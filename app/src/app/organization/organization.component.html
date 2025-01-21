@@ -3,10 +3,10 @@
     <div class="card-body">
         <div>ชื่อร้าน</div>
         <input class="form-control" [(ngModel)]="name">
-         
+
         <div class="mt-3">ที่อยู่</div>
         <input type="text" class="form-control" [(ngModel)]="address">
-        
+
         <div class="mt-3">เบอร์โทรศัพท์</div>
         <input type="text" class="form-control" [(ngModel)]="phone">
 
@@ -25,12 +25,9 @@
         <div class="mt-3">PromptPay</div>
         <input type="text" class="form-control" [(ngModel)]="promptPay">
 
-        <button class="mt-3 btn btn-primary">
+        <button class="mt-3 btn btn-primary" (click)="save()">
             <i class="fa fa-check me-2"></i>
             บันทึกข้อมูล
         </button>
-
-       
-
     </div>
 </div>
