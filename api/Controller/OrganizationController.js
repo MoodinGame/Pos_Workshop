@@ -7,7 +7,9 @@ module.exports = {
     create: async (req, res) => {
         try {
 
-            const organization = await prisma.organization.findFrist();
+            const organization = await prisma.organization.findFirst();
+
+            
             const playload = {
                 name: req.body.name,
                 address: req.body.address,
@@ -72,3 +74,5 @@ module.exports = {
 
     }
 };
+
+

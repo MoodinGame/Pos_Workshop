@@ -13,6 +13,7 @@ const foodSizeController = require("./Controller/FoodSizeController");
 const tasteController = require("./Controller/TasteController");
 const foodController = require("./Controller/FoodController");
 const saleTemplateController = require("./Controller/SaleTempController");
+const organizationController = require("./Controller/OrganizationController");
 const app = express();
 
 // Middleware
@@ -170,15 +171,15 @@ app.post("/api/saleTemp/endSale", (req, res) => {
 //Organization
 
 app.post("/api/organization/save", (req, res) => {
-  organizationController.create(req, res);
+ organizationController.create(req, res);
 });
 
 app.get("/api/organization/info", (req, res) => {
-  organizationController.info(req, res);
+ organizationController.info(req, res);
 });
 
 app.post("/api/organization/upload", (req, res) => {
-  organizationController.upload(req, res);
+ organizationController.upload(req, res);
 });
 
 // Error handling middleware
