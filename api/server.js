@@ -168,6 +168,10 @@ app.post("/api/saleTemp/endSale", (req, res) => {
   saleTemplateController.endSale(req, res);
 });
 
+app.post("/api/saleTemp/printBillBeforePay", (req, res) => {
+  saleTemplateController.printBillBeforePay(req, res);
+});
+
 //Organization
 
 app.post("/api/organization/save", (req, res) => {
@@ -181,6 +185,8 @@ app.get("/api/organization/info", (req, res) => {
 app.post("/api/organization/upload", (req, res) => {
  organizationController.upload(req, res);
 });
+
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

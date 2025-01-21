@@ -21,7 +21,6 @@ module.exports = {
                 promptPay: req.body.promptPay ?? ''
             }
 
-
             if (organization) {
                 await prisma.organization.update({
                     where: {

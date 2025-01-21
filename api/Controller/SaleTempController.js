@@ -348,15 +348,17 @@ module.exports = {
         }
       });
 
-      res.send({ message: "success" });
+      return res.send({ message: "success" });
     } catch (e) {
-      res.status(500).send({ message: e.message });
+      return res.status(500).send({ message: e.message });
     }
   },
   printBillBeforePay: async (req, res) => {
     try {
+      // organization
       const organization = await prisma.organization.findFirst();
 
+      // rows in saleTemps
       const saleTemps = await prisma.saleTemp.findMany({
         include: {
           Food: true,
@@ -368,42 +370,171 @@ module.exports = {
         }
       });
 
+      // create bill by pkfkit
+      const pdfkit = require("pdfkit");
+      const fs = require("fs");
+      const dayjs = require("dayjs");
 
-     const fs = require("fs");
-     const pdfkit = require("pdfkit");
-     const dayjs = require("dayjs");
+      const paperWidth = 80;
+      const padding = 3;
 
-
-
-     const paperwidth = 80;
-     const paperpandding = 3;
-
-     const doc = new pdfkit({
-       size : [paperwidth, 200],
-        margin: {
-          top: 3,
-          bottom: 3,
-          left: 3,
-          right: 3
+      const doc = new pdfkit({
+        size: [paperWidth, 200],
+        margins: {
+          top: 5,
+          bottom: 5,
+          left: 5,
+          right: 5
         }
-     });
-  
+      });
+      const fileName = `uploads/bill-${dayjs(new Date()).format(
+        "YYYYMMDDHHmmss"
+      )}.pdf`;
+      const font = "Kanit/kanit-regular.ttf";
 
-     const fileName = `uploads/bill-${dayjs().format("YYYY-MM-DD-HH-mm-ss")}.pdf`;
-     const font = "fonts/Kanit-Regular.ttf";
+      doc.pipe(fs.createWriteStream(fileName));
 
-     doc.pipe(fs.createWriteStream(fileName));
+      // display logo
+      const imageWidth = 40;
+      const positionX = paperWidth / 2 - imageWidth / 2;
+      doc.image("uploads/" + organization.logo, positionX, 5, {
+        align: "center",
+        width: imageWidth,
+        height: 40
+      });
+      doc.moveDown();
 
-     //display logo 
+      // Organization Information
+      doc
+        .font(fontBold)
+        .fontSize(12)
+        .text(organization.name, { align: "center" });
+      doc.font(fontRegular).fontSize(9).text(organization.address, {
+        align: "center"
+      });
+      doc.text(`โทร: ${organization.phone}`, { align: "center" });
+      doc.text(`เลขผู้เสียภาษี: ${organization.taxCode}`, { align: "center" });
+      doc.moveDown();
 
-     const imageWidth = 20;
-     const positionX = (paperwidth / 2) - ( imageWidth / 2);
-     
+      // Bill Title and Details
+      doc.font(fontBold).fontSize(10).text("*** ใบแจ้งรายการ ***", {
+        align: "center"
+      });
+      doc.font(fontRegular).fontSize(9);
+      doc.text(`โต๊ะ: ${tableNo}`, { align: "left" });
+      doc.text(`วันที่: ${dayjs(new Date()).format("DD/MM/YYYY HH:mm:ss")}`, {
+        align: "left"
+      });
+      doc.moveDown();
 
+      // Table Header
+      const headerY = doc.y;
+      doc.font(fontBold).fontSize(9);
+      doc.text("รายการ", padding, headerY);
+      doc.text("ราคา", paperWidth - 100, headerY, { align: "right" });
+      doc.text("จำนวน", paperWidth - 70, headerY, { align: "right" });
+      doc.text("รวม", paperWidth - 40, headerY, { align: "right" });
 
+      // Separator
+      doc
+        .moveTo(padding, headerY + 12)
+        .lineTo(paperWidth - padding, headerY + 12)
+        .stroke();
 
+      // Table Content
+      let totalAmount = 0;
+      saleTemps.forEach(item => {
+        const itemTotal = item.Food.price * item.qty;
+        totalAmount += itemTotal;
 
+        doc.font(fontRegular).fontSize(9);
+        doc.text(item.Food.name, padding, doc.y + 5);
+        doc.text(item.Food.price.toFixed(2), paperWidth - 100, doc.y, {
+          align: "right"
+        });
+        doc.text(item.qty, paperWidth - 70, doc.y, { align: "right" });
+        doc.text(itemTotal.toFixed(2), paperWidth - 40, doc.y, {
+          align: "right"
+        });
+      });
 
-    } catch (error) {}
+      // Separator for Total
+      doc
+        .moveTo(padding, doc.y + 10)
+        .lineTo(paperWidth - padding, doc.y + 10)
+        .stroke();
+
+      // Total Amount
+      doc
+        .font(fontBold)
+        .fontSize(10)
+        .text(`รวมทั้งหมด: ${totalAmount.toFixed(2)} บาท`, {
+          align: "right",
+          margin: [0, 10, 0, 10]
+        });
+
+      // Footer
+      doc.font(fontRegular).fontSize(8).text("*** ขอบคุณที่ใช้บริการ ***", {
+        align: "center"
+      });
+
+      doc.end();
+      return fileName;
+
+      doc.font(font);
+      doc.fontSize(5).text("*** ใบแจ้งรายการ ***", 20, doc.y + 20);
+      doc.fontSize(8);
+      doc.text(organization.name, padding, doc.y);
+      doc.fontSize(4);
+      doc.text(organization.address);
+      doc.text(`เบอร์โทร: ${organization.phone}`);
+      doc.text(`เลขประจำตัวผู้เสียภาษี: ${organization.taxCode}`);
+      doc.text(`โต๊ะ: ${req.body.tableNo}`, { align: "center" });
+      doc.text(`วันที่: ${dayjs(new Date()).format("DD/MM/YYYY HH:mm:ss")}`, {
+        align: "center"
+      });
+      doc.text("รายการอาหาร", { align: "center" });
+      doc.moveDown();
+
+      const y = doc.y;
+      doc.fontSize(4);
+      doc.text("รายการ", padding, y);
+      doc.text("ราคา", padding + 18, y, { align: "right", width: 20 });
+      doc.text("จำนวน", padding + 36, y, { align: "right", width: 20 });
+      doc.text("รวม", padding + 55, y, { align: "right" });
+
+      // line
+      // set border height
+      doc.lineWidth(0.1);
+      doc.moveTo(padding, y + 6).lineTo(paperWidth - padding, y + 6).stroke();
+
+      // loop saleTemps
+      saleTemps.map((item, index) => {
+        const y = doc.y;
+        doc.text(item.Food.name, padding, y);
+        doc.text(item.Food.price, padding + 18, y, {
+          align: "right",
+          width: 20
+        });
+        doc.text(item.qty, padding + 36, y, { align: "right", width: 20 });
+        doc.text(item.Food.price * item.qty, padding + 55, y, {
+          align: "right"
+        });
+      });
+
+      // sum amount
+      let sumAmount = 0;
+      saleTemps.forEach(item => {
+        sumAmount += item.price * item.qty;
+      });
+
+      // display amount
+      doc.text(`รวม: ${sumAmount} บาท`, { align: "right" });
+      doc.end();
+
+      return res.send({ message: "success", fileName: fileName });
+    } catch (e) {
+      return res.status(500).send({ error: e.message });
+    }
   }
 };
