@@ -29,7 +29,7 @@ export class SaleComponent {
   foodId: number | undefined = 0;
   inputMoney: number = 0;
   returnMoney: number = 0;
-  billForPayURL: string = '';
+  billForPayUrl: string = '';
 
   endSale() {
     try {
@@ -443,10 +443,8 @@ export class SaleComponent {
       const res: any = await firstValueFrom(this.http.post(url, payload));
 
       setTimeout(() => {
-        this.billForPayURL = config.apiServer + '/' + res.fileName;
-        document
-          .getElementById('pdf-frame')
-          ?.setAttribute('src', this.billForPayURL);
+        this.billForPayUrl = config.apiServer + '/' + res.fileName;
+        document.getElementById('pdf-frame')?.setAttribute('src', this.billForPayUrl);
       }, 500);
     } catch (e: any) {
       Swal.fire({
