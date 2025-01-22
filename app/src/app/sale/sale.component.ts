@@ -47,7 +47,13 @@ export class SaleComponent {
           this.fetchDataSaleTemp();
 
           document.getElementById('modalEndSale_btnClose')?.click();
-          this.clearSaleTemp();
+          this.clearForm();
+           
+          const btnPrintBill = document.getElementById('btnPrintBill') as HTMLButtonElement;
+          btnPrintBill.click();
+
+          this.printBillAfterPay();
+
         });
     } catch (e: any) {
       Swal.fire({
@@ -57,11 +63,12 @@ export class SaleComponent {
       });
     }
   }
-  clearSaleTemp() {
-    this.amount = 0;
+  
+  clearForm() {
+    this.payType = 'cash';
     this.inputMoney = 0;
     this.returnMoney = 0;
-    this.payType = 'cash';
+    this.amount = 0;
   }
 
   changeInputMoney(inputMoney: number) {
@@ -444,8 +451,35 @@ export class SaleComponent {
 
       setTimeout(() => {
         this.billForPayUrl = config.apiServer + '/' + res.fileName;
-        document.getElementById('pdf-frame')?.setAttribute('src', this.billForPayUrl);
+        document
+          .getElementById('pdf-frame')
+          ?.setAttribute('src', this.billForPayUrl);
       }, 500);
+    } catch (e: any) {
+      Swal.fire({
+        title: 'error',
+        text: e.message,
+        icon: 'error',
+      });
+    }
+  }
+
+  async printBillAfterPay() {
+    try {
+      const payload = {
+       userId: this.userId,
+       tableNo: this.tableNo,
+      }
+
+      const url = config.apiServer + '/api/saleTemp/printBillAfterPay';
+      const res: any = await firstValueFrom(this.http.post(url, payload));
+
+
+      setTimeout(() => {
+        const iframe = document.getElementById('pdf-frame') as HTMLIFrameElement;
+       iframe.setAttribute('src', config.apiServer + '/' + res.fileName);
+      }, 500);
+
     } catch (e: any) {
       Swal.fire({
         title: 'error',

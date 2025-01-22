@@ -68,7 +68,7 @@
 
                         @if (amount > 0) {
                         <button class="btn btn-primary btn-block btn-lg mb-2" data-bs-toggle="modal"
-                            data-bs-target="#modalBillForPay">
+                            data-bs-target="#modalEndSale">
                             สิ้นสุดการขาย
                             <i class="fa fa-check ms-2"></i>
                         </button>
@@ -240,16 +240,17 @@
             </button>
         </div>
         <div class="col-6">
-            <button class="btn btn-success btn-block" (click)="endSale()">
+            <button class="btn btn-success btn-block" [disabled]="inputMoney < amount" (click)="endSale()">
                 จบการขาย
             </button>
         </div>
 
     </div>
 </div>
-
-
 </app-my-modal>
+
+
+<button style="display: none;" id="btnPrintBill" data-bs-toggle="modal" data-bs-target="#modalBillForPay"></button>
 
 <app-my-modal modalId="modalBillForPay" title="ใบเเจ้งรายการ">
   <iframe id="pdf-frame" frameborder="0" style="height: 300px; width: 100%;"></iframe>

@@ -172,6 +172,10 @@ app.post("/api/saleTemp/printBillBeforePay", (req, res) => {
   saleTemplateController.printBillBeforePay(req, res);
 });
 
+app.post("/api/saleTemp/printBillAfterPay", (req, res) => {
+  saleTemplateController.printBillAfterPay(req, res);
+});
+
 //Organization
 
 app.post("/api/organization/save", (req, res) => {
