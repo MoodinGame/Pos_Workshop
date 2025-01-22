@@ -434,20 +434,14 @@ module.exports = {
         .lineTo(paperWidth - padding, y + 6)
         .stroke();
 
-      // loop saleTemps
-      saleTemps.map((item, index) => {
-        const y = doc.y;
-        doc.text(item.Food.name, padding, y);
-        doc.text(item.Food.price, padding + 18, y, {
-          align: "right",
-          width: 20
+         // loop saleTemps
+         saleTemps.map((item, index) => {
+          const y = doc.y;
+          doc.text(item.Food.name, padding, y);
+          doc.text(item.Food.price, padding + 18, y, { align: 'right', width: 20 });
+          doc.text(item.qty, padding + 36, y, { align: 'right', width: 20 });
+          doc.text(item.Food.price * item.qty, padding + 55, y, { align: 'right' });
         });
-        doc.text(item.qty, padding + 36, y, { align: "right", width: 20 });
-        doc.text(item.Food.price * item.qty, padding + 55, y, {
-          align: "right"
-        });
-      });
-
       // sum amount
       let sumAmount = 0;
       saleTemps.forEach((item) => {
@@ -563,7 +557,7 @@ module.exports = {
           width: 20
         });
         doc.text(item.qty, padding + 36, y, { align: "right", width: 20 });
-        doc.text(item.Food.price * item.qty, padding + 55, y, {
+        doc.text(item.price * 1, padding + 55, y, {
           align: "right"
         });
       });
@@ -576,8 +570,8 @@ module.exports = {
 
       // display amount
       doc.text(`รวม: ${sumAmount}`, padding, doc.y, { align: 'right', width: paperWidth - padding - padding });
-      doc.text('รับเงิน' + billSale.inputMoney , padding, doc.y + 5);
-      doc.text('เงินทอน' + billSale.returnMoney , padding, doc.y + 5);
+      doc.text('รับเงิน' + billSale.inputMoney , padding, doc.y + 5 , { align: 'right', width: paperWidth - padding - padding });
+      doc.text('เงินทอน' + billSale.returnMoney , padding, doc.y + 5,  { align: 'right', width: paperWidth - padding - padding });
       doc.end();
 
       return res.send({ message: "success", fileName: fileName });
