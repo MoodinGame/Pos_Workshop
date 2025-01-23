@@ -14,6 +14,7 @@ const tasteController = require("./Controller/TasteController");
 const foodController = require("./Controller/FoodController");
 const saleTemplateController = require("./Controller/SaleTempController");
 const organizationController = require("./Controller/OrganizationController");
+const billSaleController = require("./Controller/BillSaleController");
 const app = express();
 
 // Middleware
@@ -190,7 +191,14 @@ app.post("/api/organization/upload", (req, res) => {
  organizationController.upload(req, res);
 });
 
+//billSale
+app.post("/api/billSale/list", (req, res) => {
+  billSaleController.list(req, res);
+});
 
+app.delete("/api/billSale/remove/:id", (req, res)=>{
+  billSaleController.remove(req, res);
+})
 
 // Error handling middleware
 app.use((err, req, res, next) => {

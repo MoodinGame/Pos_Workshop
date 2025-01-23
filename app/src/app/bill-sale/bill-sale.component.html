@@ -9,7 +9,7 @@
             type="date"
             class="form-control"
             placeholder="ค้นหา"
-            value="2025-01-01"
+            [(ngModel)]="startDate"
           />
         </div>
       </div>
@@ -20,12 +20,12 @@
             type="date"
             class="form-control"
             placeholder="ค้นหา"
-            value="2025-12-01"
+            [(ngModel)]="endDate"
           />
         </div>
       </div>
       <div class="col-md-2">
-        <button class="btn btn-primary">
+        <button class="btn btn-primary" (click)="fetchData()">
           <i class="fa fa-search"></i> เเสดงรายการ
         </button>
       </div>
@@ -43,16 +43,23 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td class="text-center">2025-01-01</td>
-          <td>BS0001</td>
-          <td>พนักงาน 1</td>
-          <td class="text-end">1</td>
-          <td>เงินสด</td>
-          <td class="text-end">1,000.00</td>
-          <td class="text-center">
-            
-      </tbody>
+        @for (item of billSales; track item.id) {
+            <tr>
+                <td>{{ dayjs(item.createdDate).format('DD/MM/YYYY (HH:mm)') }}</td>
+                <td>{{ item.id }}</td>
+                <td>{{ item.User.name }}</td>
+                <td class="text-end">{{ item.tableNo }}</td>
+                <td>{{ item.payType }}</td>
+                <td class="text-end">{{ item.amount.toLocaleString('th-TH') }}</td>
+                <td class="text-center">
+                    <button class="btn btn-danger" (click)="remove(item.id)">
+                        <i class="fas fa-times me-1"></i>
+                        ยกเลิก
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
     </table>
   </div>
 </div>
