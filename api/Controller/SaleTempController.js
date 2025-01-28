@@ -318,15 +318,28 @@ module.exports = {
             });
           }
         } else {
-          console.log(item.Food.price);
-          //no detail
-          await prisma.billSaleDetail.create({
-            data: {
-              billSaleId: billSale.id,
-              foodId: item.foodId,
-              price: item.Food.price
+          if (item.qty > 0) {
+            //qty > 1
+
+            for (let j = 0; j < item.qty; j++) {
+              await prisma.billSaleDetail.create({
+                data: {
+                  billSaleId: billSale.id,
+                  foodId: item.foodId,
+                  price: item.Food.price
+                }
+              });
             }
-          });
+          } else {
+            //no detail
+            await prisma.billSaleDetail.create({
+              data: {
+                billSaleId: billSale.id,
+                foodId: item.foodId,
+                price: item.Food.price
+              }
+            });
+          }
         }
       }
 
@@ -429,22 +442,24 @@ module.exports = {
       // line
       // set border height
       doc.lineWidth(0.1);
-      doc
-        .moveTo(padding, y + 6)
-        .lineTo(paperWidth - padding, y + 6)
-        .stroke();
+      doc.moveTo(padding, y + 6).lineTo(paperWidth - padding, y + 6).stroke();
 
-         // loop saleTemps
-         saleTemps.map((item, index) => {
-          const y = doc.y;
-          doc.text(item.Food.name, padding, y);
-          doc.text(item.Food.price, padding + 18, y, { align: 'right', width: 20 });
-          doc.text(item.qty, padding + 36, y, { align: 'right', width: 20 });
-          doc.text(item.Food.price * item.qty, padding + 55, y, { align: 'right' });
+      // loop saleTemps
+      saleTemps.map((item, index) => {
+        const y = doc.y;
+        doc.text(item.Food.name, padding, y);
+        doc.text(item.Food.price, padding + 18, y, {
+          align: "right",
+          width: 20
         });
+        doc.text(item.qty, padding + 36, y, { align: "right", width: 20 });
+        doc.text(item.Food.price * item.qty, padding + 55, y, {
+          align: "right"
+        });
+      });
       // sum amount
       let sumAmount = 0;
-      saleTemps.forEach((item) => {
+      saleTemps.forEach(item => {
         sumAmount += item.price * item.qty;
       });
 
@@ -543,10 +558,7 @@ module.exports = {
       // line
       // set border height
       doc.lineWidth(0.1);
-      doc
-        .moveTo(padding, y + 6)
-        .lineTo(paperWidth - padding, y + 6)
-        .stroke();
+      doc.moveTo(padding, y + 6).lineTo(paperWidth - padding, y + 6).stroke();
 
       // loop saleTemps
       BillSaleDetails.map((item, index) => {
@@ -564,14 +576,23 @@ module.exports = {
 
       // sum amount
       let sumAmount = 0;
-      BillSaleDetails.forEach((item) => {
+      BillSaleDetails.forEach(item => {
         sumAmount += item.price * item.qty;
       });
 
       // display amount
-      doc.text(`รวม: ${sumAmount}`, padding, doc.y, { align: 'right', width: paperWidth - padding - padding });
-      doc.text('รับเงิน' + billSale.inputMoney , padding, doc.y + 5 , { align: 'right', width: paperWidth - padding - padding });
-      doc.text('เงินทอน' + billSale.returnMoney , padding, doc.y + 5,  { align: 'right', width: paperWidth - padding - padding });
+      doc.text(`รวม: ${sumAmount}`, padding, doc.y, {
+        align: "right",
+        width: paperWidth - padding - padding
+      });
+      doc.text("รับเงิน" + billSale.inputMoney, padding, doc.y + 5, {
+        align: "right",
+        width: paperWidth - padding - padding
+      });
+      doc.text("เงินทอน" + billSale.returnMoney, padding, doc.y + 5, {
+        align: "right",
+        width: paperWidth - padding - padding
+      });
       doc.end();
 
       return res.send({ message: "success", fileName: fileName });

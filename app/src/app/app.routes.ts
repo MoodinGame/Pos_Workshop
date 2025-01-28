@@ -7,6 +7,7 @@ import { FoodComponent } from './food/food.component';
 import { SaleComponent } from './sale/sale.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { BillSaleComponent } from './bill-sale/bill-sale.component';
+import { ReportSumPerDayComponent } from './report-sum-per-day/report-sum-per-day.component';
 
 
 export const routes: Routes = [
@@ -37,5 +38,8 @@ export const routes: Routes = [
     },{
         path: 'bill-sale',
         component: BillSaleComponent,
+    },{
+        path: 'report-sum-per-day',
+        component : ReportSumPerDayComponent
     }
 ];
