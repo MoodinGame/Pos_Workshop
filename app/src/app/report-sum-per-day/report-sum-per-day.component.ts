@@ -25,8 +25,7 @@ export class ReportSumPerDayComponent {
   ngOnInit() {
     this.ddlYear = this.getYear();
     this.ddlMonth = this.getMonth();
-
-
+    this.fetchData();
   }
 
   getYear() {
@@ -44,10 +43,11 @@ export class ReportSumPerDayComponent {
       year: this.year,
       month: this.month,
     }
-
+    
     this.http.post(config.apiServer + '/api/report/sumPerDayInYearAndMonth', playload)
     .subscribe((res: any) => {
       this.data = res.results;
     })
+      
   }
 }

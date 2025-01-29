@@ -464,6 +464,8 @@ export class SaleComponent {
     }
   }
 
+  
+
   async printBillAfterPay() {
     try {
       const payload = {
