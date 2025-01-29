@@ -15,6 +15,7 @@ const foodController = require("./Controller/FoodController");
 const saleTemplateController = require("./Controller/SaleTempController");
 const organizationController = require("./Controller/OrganizationController");
 const billSaleController = require("./Controller/BillSaleController");
+const reportController = require("./Controller/ReportController");
 const app = express();
 
 // Middleware
@@ -199,6 +200,11 @@ app.post("/api/billSale/list", (req, res) => {
 app.delete("/api/billSale/remove/:id", (req, res)=>{
   billSaleController.remove(req, res);
 })
+
+//Report
+app.post("/api/report/sumPerDayInYearAndMonth", (req, res) => {
+  reportController.sumPerDayInYearAndMonth(req, res);
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
