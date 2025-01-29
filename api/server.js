@@ -206,6 +206,10 @@ app.post("/api/report/sumPerDayInYearAndMonth", (req, res) => {
   reportController.sumPerDayInYearAndMonth(req, res);
 });
 
+app.post("/api/report/sumPerMonthInYear", (req, res) => {
+  reportController.sumPerMonthInYear(req, res);
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

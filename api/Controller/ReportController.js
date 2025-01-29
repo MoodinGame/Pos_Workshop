@@ -68,9 +68,10 @@ module.exports = {
         const billSales = await prisma.billSale.findMany({
           where: {
             createdDate: {
-              gte: new Date(startDate.format("YYYY-MM-DD")),
-              lte: new Date(endDate.format("YYYYY-MM-DD"))
+              gte: new Date(startDate.format('YYYY-MM-DD')),
+              lte: new Date(endDate.format('YYYY-MM-DD'))
             },
+            
             status: "use"
           },
           include: {
@@ -88,9 +89,8 @@ module.exports = {
             sum += billSaleDetails[j].price;
           }
         }
-
         sumPerMonth.push({
-          month: month,
+          month: startDate.format("MM"),
           amount: sum
         });
       }
