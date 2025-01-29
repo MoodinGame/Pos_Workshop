@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import config from '../config';
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
+import { title } from 'process';
 
 @Component({
   selector: 'app-report-sum-per-day',
@@ -33,21 +34,45 @@ export class ReportSumPerDayComponent {
     return Array.from({ length: 5 }, (_, i) => currentYear - i);
   }
 
-  getMonth(){
-    const thaiMonths = [  'มกราคม', 'กุมภาพันธ์', 'มีนาคม',  'เมษายน', 'พฤษภาคม',  'มิถุนายน',  'กรกฎาคม', 'สิงหาคม', 'กันยายน',  'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
-    return thaiMonths
+  getMonth() {
+    const thaiMonths = [
+      'มกราคม',
+      'กุมภาพันธ์',
+      'มีนาคม',
+      'เมษายน',
+      'พฤษภาคม',
+      'มิถุนายน',
+      'กรกฎาคม',
+      'สิงหาคม',
+      'กันยายน',
+      'ตุลาคม',
+      'พฤศจิกายน',
+      'ธันวาคม',
+    ];
+    return thaiMonths;
   }
 
   fetchData() {
-    const playload = {
-      year: this.year,
-      month: this.month,
+    try {
+      const playload = {
+        year: this.year,
+        month: this.month,
+      };
+
+      this.http
+        .post(
+          config.apiServer + '/api/report/sumPerDayInYearAndMonth',
+          playload
+        )
+        .subscribe((res: any) => {
+          this.data = res.results;
+        });
+    } catch (e: any) {
+      Swal.fire({
+        title: 'Error!',
+        text: e.message,
+        icon: 'error',
+      });
     }
-    
-    this.http.post(config.apiServer + '/api/report/sumPerDayInYearAndMonth', playload)
-    .subscribe((res: any) => {
-      this.data = res.results;
-    })
-      
   }
 }
