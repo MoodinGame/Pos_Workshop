@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import dayjs from 'dayjs';
 import config from '../config';
@@ -29,22 +29,27 @@ export class ReportSumPerMonthComponent {
     this.ddlYear = Array.from({ length : 10 }, (_,i) => this.year - i);
     this.fetchData();
   }
+
   fetchData() {
-   try {
-    const playload = {
-      year: this.year
+    try {
+      const payload = {
+        year: this.year
+      }
+        
+      //  Middleware
+      const token = localStorage.getItem('angular_token')!;
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+      this.http.post(config.apiServer + '/api/report/sumPerMonthInYear', payload, { headers: headers })
+        .subscribe((res: any) => {
+          this.data = res.results;
+        })
+    } catch (e: any) {
+      Swal.fire({
+        title: 'error',
+        text: e.message,
+        icon: 'error'
+      })
     }
-    this.http.post(config.apiServer + '/api/report/sumPerMonthInYear', playload)
-    .subscribe((res: any) => {
-      this.data = res.results;
-    })
-    
-   } catch (e : any) {
-    Swal.fire({
-      icon : 'error',
-      title : 'Error',
-      text : e.message
-    });
-   }
   }
 }

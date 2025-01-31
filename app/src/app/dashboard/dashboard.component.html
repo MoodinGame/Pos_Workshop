@@ -1,42 +1,41 @@
-<p>dashboard works!</p>
 <div class="mt-3 card">
-  <div class="card-header">
-    <h4>Dashboard</h4>
-  </div>
+  <div class="card-header">Dashboard</div>
   <div class="card-body">
-    <div class="row">
-      <div class="col-md-3">
-        <div class="form-group">
-          <select class="form-control" [(ngModel)]="year">
-            @for (year of years; track year) {
-            <option [value]="year">{{ year }}</option>
-            }
-          </select>
-        </div>
+      <div class="row">
+          <div class="col-md-3">
+              <div class="form-group">
+                  <select class="form-control" [(ngModel)]="year">
+                      @for (year of years; track year) {
+                          <option [value]="year">{{ year }}</option>
+                      }
+                  </select>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="form-group">
+                  <select class="form-control" [(ngModel)]="month">
+                      @for (month of monthNames; track $index) {
+                          <option [value]="$index + 1">{{ month }}</option>
+                      }
+                  </select>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <button class="btn btn-primary" (click)="fetchData()">
+                  <i class="fa fa-search"></i>
+                  แสดงข้อมูล
+              </button>
+          </div>
       </div>
-      <div class="col-md-3">
-        <div class="form-group">
-          <select class="form-control" [(ngModel)]="month">
-            @for (month of monthNames; track $index) {
-            <option [value]="$index">{{ month }}</option>
-            }
-          </select>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <button class="btn btn-primary" (click)="fetchData()">
-          Get Report
-        </button>
-      </div>
-    </div>
-    <div class="col-md-12">
-      <div class="h4">สรุปยอดขายรายวัน</div>
-      <canvas id="chartPerDay" height="100"></canvas>
-    </div>
 
-    <div class="col-md-12 mt-3">
-      <div class="h4">สรุปยอดขายรายเดือน</div>
-      <canvas id="chartPerMonth" height="100"></canvas>
-    </div>
+      <div class="col-md-12">
+          <div class="h4">สรุปยอดขายรายวัน</div>
+          <canvas id="chartPerDay" height="100"></canvas>
+      </div>
+
+      <div class="col-md-12 mt-3">
+          <div class="h4">สรุปยอดขายรายเดือน</div>
+          <canvas id="chartPerMonth" height="100"></canvas>
+      </div>
   </div>
 </div>

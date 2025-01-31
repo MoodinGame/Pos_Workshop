@@ -10,7 +10,7 @@ import { BillSaleComponent } from './bill-sale/bill-sale.component';
 import { ReportSumPerDayComponent } from './report-sum-per-day/report-sum-per-day.component';
 import { ReportSumPerMonthComponent } from './report-sum-per-month/report-sum-per-month.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-
+import { UserComponent } from './user/user.component';
 
 
 
@@ -51,5 +51,8 @@ export const routes: Routes = [
     } ,{
         path: 'dashboard',
         component : DashboardComponent
+    },{
+        path: 'user',
+        component : UserComponent
     }
 ];

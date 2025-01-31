@@ -1,0 +1,67 @@
+<div class="card mt-3">
+  <div class="card-header">
+    <h3 class="card-title">ผู้ใช้งานระบบ</h3>
+  </div>
+  <div class="card-body">
+    <button class="btn btn-primary" (click)="clear()" data-bs-toggle="modal" data-bs-target="#modalUser">
+      <i class="fa fa-plus"></i> เพิ่มผู้ใช้งาน
+    </button>
+
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr>
+          <th width="250px">ชื่อผู้ใช่งาน</th>
+          <th width="100px">Username</th>
+          <th class="text-center" >Level</th>
+          <th width="110px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users; track user.id) {
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.username }}</td>
+                <td class="text-center">{{ user.level }}</td>
+                <td class="text-center">
+                  <button class="btn bg-primary me-2" (click)="edit(user)" data-bs-toggle="modal" data-bs-target="#modalUser">
+                     <i class="fas fa-pencil"></i>
+                  </button>
+                  <button class="btn bg-danger" (click)="remove(user.id)">
+                     <i class="fas fa-times"></i>
+                  </button>
+                 </td>
+            </tr>
+        }
+    </tbody>
+    </table>
+  </div>
+</div>
+
+<app-my-modal modalId="modalUser" title="ผู้ใช้งานระบบ">
+  <div class="mb-4">
+    <label class="form-label">ชื่อผู้ใช้งาน</label>
+    <input class="form-control form-control-lg" [(ngModel)]="name" />
+  </div>
+  <div class="mb-4">
+    <label class="form-label">Username</label>
+    <input class="form-control form-control-lg" [(ngModel)]="username" />
+  </div>
+  <div class="mb-4">
+    <label class="form-label">Password</label>
+    <input class="form-control form-control-lg" [(ngModel)]="password" />
+  </div>
+  <div class="mb-4">
+    <label class="form-label">Level</label>
+    <select class="form-control" [(ngModel)]="level"> >
+      <option value="admin">Admin</option>
+      <option value="employee">Employee</option>
+    </select>
+  </div>
+  <div class="mb-4">
+   <button class="btn btn-primary"   (click)="saveUser()">
+      <i class="fa fa-save"></i> บันทึก
+   </button>
+  </div>
+</app-my-modal>
+
+

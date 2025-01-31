@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import config from '../config';
@@ -59,10 +59,13 @@ export class ReportSumPerDayComponent {
         month: this.month,
       };
 
+      const token = localStorage.getItem('angular_token')!;
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
       this.http
         .post(
           config.apiServer + '/api/report/sumPerDayInYearAndMonth',
-          playload
+          playload , { headers: headers }
         )
         .subscribe((res: any) => {
           this.data = res.results;
