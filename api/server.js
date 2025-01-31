@@ -1,10 +1,11 @@
 const express = require("express");
+const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const fileUpload = require("express-fileupload");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
-// Initialize dotenv for environment variables
 dotenv.config();
 
 const userController = require("./Controller/UserController");
@@ -16,7 +17,7 @@ const saleTemplateController = require("./Controller/SaleTempController");
 const organizationController = require("./Controller/OrganizationController");
 const billSaleController = require("./Controller/BillSaleController");
 const reportController = require("./Controller/ReportController");
-const app = express();
+
 
 // Middleware
 app.use(cors());
@@ -25,10 +26,48 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(fileUpload());
 app.use("/uploads", express.static("./uploads"));
 
+
+function isSignIn(req, res, next) {
+  try {
+    const token = req.headers.authorization.split(" ")[1]; // Bearer <token>
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const level = decoded.level;
+
+    if (level !== null) {
+      next();
+    } else {
+      return res.status(401).send({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(500).send({ error: e.message });
+  }
+}
+
+
 // Routes
 
 app.post("/api/user/signin", (req, res) => {
   userController.signin(req, res);
+});
+
+app.get("/api/user/list", (req, res) => {
+  userController.list(req, res);
+});
+
+app.put("/api/user/update", (req, res) => {
+  userController.update(req, res);
+});
+
+app.post("/api/user/create", (req, res) => {
+  userController.create(req, res);
+});
+
+app.delete("/api/user/remove/:id", (req, res) => {
+  userController.remove(req, res);
+});
+
+app.get("/api/user/getLevelFromToken", (req, res) => {
+  userController.getLevelFromToken(req, res);
 });
 
 //FoodType
@@ -202,11 +241,11 @@ app.delete("/api/billSale/remove/:id", (req, res)=>{
 })
 
 //Report
-app.post("/api/report/sumPerDayInYearAndMonth", (req, res) => {
+app.post("/api/report/sumPerDayInYearAndMonth",isSignIn, (req, res) => {
   reportController.sumPerDayInYearAndMonth(req, res);
 });
 
-app.post("/api/report/sumPerMonthInYear", (req, res) => {
+app.post("/api/report/sumPerMonthInYear",isSignIn, (req, res) => {
   reportController.sumPerMonthInYear(req, res);
 });
 
