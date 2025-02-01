@@ -1,21 +1,22 @@
 {
   "dependencies": {
     "@prisma/client": "^6.2.1",
-    "@types/node": "^22.5.5",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "express-fileupload": "^1.5.1",
     "jsonwebtoken": "^9.0.2",
     "pdfkit": "^0.16.0",
     "pdfkit-table": "^0.1.99",
     "pg": "^8.12.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.6.2"
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
-    "prisma": "^6.2.1"
+    "@types/node": "^22.10.7",
+    "prisma": "^6.2.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
   }
 }

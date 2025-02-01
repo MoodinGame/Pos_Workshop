@@ -44,7 +44,7 @@ export class SignInComponent implements OnInit {
 
       try {
         this.http
-          .post('http://localhost:3000/api/user/signin', payload)
+          .post(config.apiServer +'/api/user/signin', payload)
           .subscribe(
             (res: any) => {
               this.token = res.token;
