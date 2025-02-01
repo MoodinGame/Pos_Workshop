@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  level    String // admin, employee
+  username String
+  password String
+  status   String @default("use")
+  BillSales BillSale[]
+}
+
+model FoodType {
+  id        Int        @id @default(autoincrement())
+  name      String
+  remark    String
+  status    String     @default("use")
+  FoodSizes FoodSize[]
+  Tastes    Taste[]
+  Foods     Food[]
+}
+
+model FoodSize {
+  id         Int      @id @default(autoincrement())
+  name       String
+  remark     String?
+  moneyAdded Int      @default(0)
+  status     String   @default("use")
+  foodTypeId Int
+  FoodType   FoodType @relation(fields: [foodTypeId], references: [id])
+}
+
+model Taste {
+  id         Int      @id @default(autoincrement())
+  name       String
+  remark     String?
+  status     String   @default("use")
+  foodTypeId Int
+  FoodType   FoodType @relation(fields: [foodTypeId], references: [id])
+}
+
+model Food {
+  id              Int              @id @default(autoincrement())
+  foodTypeId      Int
+  name            String
+  remark          String?
+  price           Int
+  img             String
+  foodType        String           @default("food")
+  status          String           @default("use")
+  FoodType        FoodType         @relation(fields: [foodTypeId], references: [id])
+  SaleTemps       SaleTemp[]
+  SaleTempDetails SaleTempDetail[]
+  BillSaleDetails BillSaleDetail[]
+}
+
+model SaleTemp {
+  id Int @id() @default(autoincrement())
+  foodId Int
+  qty Int 
+  price Int 
+  tableNo Int
+  userId Int
+  Food Food @relation(fields: [foodId], references: [id])
+  SaleTempDetails SaleTempDetail[]
+}
+
+model SaleTempDetail {
+  id Int @id() @default(autoincrement())
+  saleTempId Int 
+  addedMoney Int?
+  tasteId Int?
+  foodId Int 
+  Food Food @relation(fields: [foodId], references: [id])
+  SaleTemp SaleTemp @relation(fields: [saleTempId], references: [id])
+}
+
+
+model BillSale{
+  id Int @id() @default(autoincrement())
+  userId Int
+  amount Int
+  inputMoney Int
+  returnMoney Int
+  payType String
+  tableNo Int
+  createdDate DateTime @default(now())
+  payDate DateTime @default(now())
+  status String @default("use")
+  User User @relation(fields: [userId], references: [id])
+  BillSaleDetails BillSaleDetail[]
+}
+model BillSaleDetail {
+  id Int @id() @default(autoincrement())
+  billSaleId Int 
+  foodId Int 
+  foodSizeId Int?
+  tasteId Int?
+  price Int?
+  moneyAdded Int?
+  BillSale BillSale @relation(fields: [billSaleId], references: [id])
+  Food Food @relation(fields: [foodId], references: [id])
+}
+
+model Organization {
+  id Int @id() @default(autoincrement())
+  name String 
+  address String 
+  phone String?
+  email String?
+  website String?
+  promptPay String?
+  logo String?
+  taxCode String
+}

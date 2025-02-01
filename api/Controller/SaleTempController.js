@@ -408,7 +408,7 @@ module.exports = {
         },
       });
       const fileName = `uploads/bill-${dayjs(new Date()).format('YYYYMMDDHHmmss')}.pdf`;
-      const font = 'Kanit/kanit-regular.ttf';
+      const font = 'Kanit/Kanit-Regular.ttf';
 
       doc.pipe(fs.createWriteStream(fileName));
 
@@ -447,30 +447,20 @@ module.exports = {
       doc.lineWidth(0.1);
       doc.moveTo(padding, y + 6).lineTo(paperWidth - padding, y + 6).stroke();
 
-      saleTemps.forEach((item) => {
+      // loop saleTemps
+      saleTemps.map((item, index) => {
         const y = doc.y;
-  
-        // Ensure values are valid numbers
-        const price = Number(item.Food?.price) || 0;
-        const addedMoney = Number(item.SaleTempDetails?.addedMoney) || 0;
-        const qty = Number(item.qty) || 0;
-  
-        doc.text(item.Food?.name || "Unknown Item", padding, y);
-        doc.text(price + addedMoney, padding + 18, y, { align: 'right', width: 20 });
-        doc.text(qty, padding + 36, y, { align: 'right', width: 20 });
-        doc.text((price + addedMoney) * qty, padding + 55, y, { align: 'right' });
+        doc.text(item.Food.name, padding, y);
+        doc.text(item.Food.price, padding + 18, y, { align: 'right', width: 20 });
+        doc.text(item.qty, padding + 36, y, { align: 'right', width: 20 });
+        doc.text(item.Food.price * item.qty, padding + 55, y, { align: 'right' });
       });
-  
-      // Calculate total amount
+
+      // sum amount
       let sumAmount = 0;
       saleTemps.forEach((item) => {
-        const price = Number(item.Food?.price) || 0;
-        const addedMoney = Number(item.SaleTempDetails?.addedMoney) || 0;
-        const qty = Number(item.qty) || 0;
-  
-        sumAmount += (price + addedMoney) * qty;
+        sumAmount += item.price * item.qty;
       });
-  
 
       // display amount
       doc.text(`รวม: ${sumAmount} บาท`, { align: 'right' });
@@ -615,7 +605,7 @@ module.exports = {
         },
       });
       const fileName = `uploads/invoice-${dayjs(new Date()).format('YYYYMMDDHHmmss')}.pdf`;
-      const font = 'Kanit/kanit-regular.ttf';
+      const font = 'Kanit/Kanit-Regular.ttf';
 
       doc.pipe(fs.createWriteStream(fileName));
 
@@ -685,6 +675,7 @@ module.exports = {
   }
 };
 
+/*
 
 
 
@@ -695,3 +686,13 @@ module.exports = {
 
 
 
+
+
+
+
+
+
+
+
+
+*/
